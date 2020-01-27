@@ -1,9 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, ScrollView } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
-import { ApolloProvider } from '@apollo/react-hooks';
-import { apolloClient } from './graphql';
-import { Books } from './src';
+import CardView from './src/components/CardView';
 
 const theme = {
   ...DefaultTheme,
@@ -15,23 +13,44 @@ const theme = {
   }
 };
 
+const trip1 = {
+  title: 'Sundown Town',
+  description: 'Awaiting daybreak',
+  imageUrl: 'https://i.picsum.photos/id/695/700/700.jpg'
+};
+
+const trip2 = {
+  title: 'The Stars',
+  description: 'Astro vigil',
+  imageUrl: 'https://i.picsum.photos/id/683/701/701.jpg'
+};
+
+const trip3 = {
+  title: 'Coastal Cruise',
+  description: 'Serene scene',
+  imageUrl: 'https://i.picsum.photos/id/51/701/701.jpg'
+};
+
 export default function App() {
   return (
-    <ApolloProvider client={apolloClient}>
-      <PaperProvider theme={theme}>
-        <View style={styles.container}>
-          <Books />
-        </View>
-      </PaperProvider>
-    </ApolloProvider>
+    <PaperProvider theme={theme}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.contentContainer}
+      >
+        <CardView {...trip1} />
+        <CardView {...trip2} />
+        <CardView {...trip3} />
+      </ScrollView>
+    </PaperProvider>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
+    backgroundColor: '#fff'
+  },
+  contentContainer: {
+    paddingVertical: 40
   }
 });
