@@ -26,12 +26,14 @@ export type Place = {
   id: Scalars['ID'];
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
+  imageUrl?: Maybe<Scalars['String']>;
   creationDate: Scalars['DateTime'];
 };
 
 export type PlaceInput = {
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
+  imageUrl?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -48,7 +50,10 @@ export type PlacesQueryVariables = {};
 
 export type PlacesQuery = { __typename?: 'Query' } & {
   places: Array<
-    { __typename?: 'Place' } & Pick<Place, 'id' | 'title' | 'description'>
+    { __typename?: 'Place' } & Pick<
+      Place,
+      'id' | 'title' | 'description' | 'imageUrl'
+    >
   >;
 };
 
@@ -60,7 +65,7 @@ export type PlaceQuery = { __typename?: 'Query' } & {
   place: Maybe<
     { __typename?: 'Place' } & Pick<
       Place,
-      'id' | 'title' | 'description' | 'creationDate'
+      'id' | 'title' | 'description' | 'imageUrl' | 'creationDate'
     >
   >;
 };
@@ -73,7 +78,7 @@ export type AddPlaceMutationVariables = {
 export type AddPlaceMutation = { __typename?: 'Mutation' } & {
   addPlace: { __typename?: 'Place' } & Pick<
     Place,
-    'id' | 'title' | 'description' | 'creationDate'
+    'id' | 'title' | 'description' | 'imageUrl' | 'creationDate'
   >;
 };
 
@@ -83,6 +88,7 @@ export const PlacesDocument = gql`
       id
       title
       description
+      imageUrl
     }
   }
 `;
@@ -136,6 +142,7 @@ export const PlaceDocument = gql`
       id
       title
       description
+      imageUrl
       creationDate
     }
   }
@@ -191,6 +198,7 @@ export const AddPlaceDocument = gql`
       id
       title
       description
+      imageUrl
       creationDate
     }
   }
