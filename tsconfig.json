@@ -2,10 +2,13 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "jsx": "react-native",
-    "lib": ["dom", "esnext"],
+    "target": "es6",
+    "module": "commonjs",
+    "lib": ["dom", "es6", "es2017", "esnext.asynciterable"],
     "moduleResolution": "node",
     "noEmit": true,
     "skipLibCheck": true,
     "resolveJsonModule": true
-  }
+  },
+  "exclude": ["node_modules"]
 }
