@@ -1,16 +1,12 @@
 import React from 'react';
 import { SafeAreaView, FlatList, Button } from 'react-native';
-import {
-  usePlacesQuery,
-  useCreatePlaceMutation,
-  createPlaceMutationOptions
-} from '../../graphql';
+import { usePlacesQuery, useCreatePlaceMutation } from '../../graphql';
 import { CardView } from '../components';
 
 interface Props {}
 
 const Places: React.FC<Props> = () => {
-  const { data } = usePlacesQuery();
+  const { data, refetch } = usePlacesQuery();
   const [createPlace] = useCreatePlaceMutation();
   return (
     <SafeAreaView>
@@ -19,13 +15,15 @@ const Places: React.FC<Props> = () => {
           <Button
             title="Add New Place"
             onPress={() => {
-              createPlace(
-                createPlaceMutationOptions({
-                  title: `New Place #${data.places && data.places.length + 1}`,
+              createPlace({
+                variables: {
+                  title: `Place #${data.places.length + 1}`,
                   description: '',
                   imageUrl: ''
-                }) as any
-              );
+                }
+              })
+                .then(() => refetch())
+                .catch(err => console.log(err));
             }}
           />
         )}
