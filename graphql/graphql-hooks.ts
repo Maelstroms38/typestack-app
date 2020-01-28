@@ -14,10 +14,10 @@ export type Scalars = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addPlace: Place;
+  createPlace: Place;
 };
 
-export type MutationAddPlaceArgs = {
+export type MutationCreatePlaceArgs = {
   place: PlaceInput;
 };
 
@@ -46,14 +46,16 @@ export type QueryPlaceArgs = {
   id: Scalars['Float'];
 };
 
-export type PlacesQueryVariables = {};
+export type CreatePlaceMutationVariables = {
+  title: Scalars['String'];
+  description: Scalars['String'];
+  imageUrl: Scalars['String'];
+};
 
-export type PlacesQuery = { __typename?: 'Query' } & {
-  places: Array<
-    { __typename?: 'Place' } & Pick<
-      Place,
-      'id' | 'title' | 'description' | 'imageUrl'
-    >
+export type CreatePlaceMutation = { __typename?: 'Mutation' } & {
+  createPlace: { __typename?: 'Place' } & Pick<
+    Place,
+    'id' | 'title' | 'description' | 'imageUrl' | 'creationDate'
   >;
 };
 
@@ -70,74 +72,81 @@ export type PlaceQuery = { __typename?: 'Query' } & {
   >;
 };
 
-export type AddPlaceMutationVariables = {
-  title: Scalars['String'];
-  description: Scalars['String'];
-};
+export type PlacesQueryVariables = {};
 
-export type AddPlaceMutation = { __typename?: 'Mutation' } & {
-  addPlace: { __typename?: 'Place' } & Pick<
-    Place,
-    'id' | 'title' | 'description' | 'imageUrl' | 'creationDate'
+export type PlacesQuery = { __typename?: 'Query' } & {
+  places: Array<
+    { __typename?: 'Place' } & Pick<
+      Place,
+      'id' | 'title' | 'description' | 'imageUrl' | 'creationDate'
+    >
   >;
 };
 
-export const PlacesDocument = gql`
-  query places {
-    places {
+export const CreatePlaceDocument = gql`
+  mutation CreatePlace(
+    $title: String!
+    $description: String!
+    $imageUrl: String!
+  ) {
+    createPlace(
+      place: { title: $title, description: $description, imageUrl: $imageUrl }
+    ) {
       id
       title
       description
       imageUrl
+      creationDate
     }
   }
 `;
+export type CreatePlaceMutationFn = ApolloReactCommon.MutationFunction<
+  CreatePlaceMutation,
+  CreatePlaceMutationVariables
+>;
 
 /**
- * __usePlacesQuery__
+ * __useCreatePlaceMutation__
  *
- * To run a query within a React component, call `usePlacesQuery` and pass it any options that fit your needs.
- * When your component renders, `usePlacesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
+ * To run a mutation, you first call `useCreatePlaceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePlaceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const { data, loading, error } = usePlacesQuery({
+ * const [createPlaceMutation, { data, loading, error }] = useCreatePlaceMutation({
  *   variables: {
+ *      title: // value for 'title'
+ *      description: // value for 'description'
+ *      imageUrl: // value for 'imageUrl'
  *   },
  * });
  */
-export function usePlacesQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
-    PlacesQuery,
-    PlacesQueryVariables
+export function useCreatePlaceMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    CreatePlaceMutation,
+    CreatePlaceMutationVariables
   >
 ) {
-  return ApolloReactHooks.useQuery<PlacesQuery, PlacesQueryVariables>(
-    PlacesDocument,
-    baseOptions
-  );
+  return ApolloReactHooks.useMutation<
+    CreatePlaceMutation,
+    CreatePlaceMutationVariables
+  >(CreatePlaceDocument, baseOptions);
 }
-export function usePlacesLazyQuery(
-  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
-    PlacesQuery,
-    PlacesQueryVariables
-  >
-) {
-  return ApolloReactHooks.useLazyQuery<PlacesQuery, PlacesQueryVariables>(
-    PlacesDocument,
-    baseOptions
-  );
-}
-export type PlacesQueryHookResult = ReturnType<typeof usePlacesQuery>;
-export type PlacesLazyQueryHookResult = ReturnType<typeof usePlacesLazyQuery>;
-export type PlacesQueryResult = ApolloReactCommon.QueryResult<
-  PlacesQuery,
-  PlacesQueryVariables
+export type CreatePlaceMutationHookResult = ReturnType<
+  typeof useCreatePlaceMutation
+>;
+export type CreatePlaceMutationResult = ApolloReactCommon.MutationResult<
+  CreatePlaceMutation
+>;
+export type CreatePlaceMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreatePlaceMutation,
+  CreatePlaceMutationVariables
 >;
 export const PlaceDocument = gql`
-  query place($id: Float!) {
+  query Place($id: Float!) {
     place(id: $id) {
       id
       title
@@ -192,9 +201,9 @@ export type PlaceQueryResult = ApolloReactCommon.QueryResult<
   PlaceQuery,
   PlaceQueryVariables
 >;
-export const AddPlaceDocument = gql`
-  mutation addPlace($title: String!, $description: String!) {
-    addPlace(place: { title: $title, description: $description }) {
+export const PlacesDocument = gql`
+  query Places {
+    places {
       id
       title
       description
@@ -203,45 +212,47 @@ export const AddPlaceDocument = gql`
     }
   }
 `;
-export type AddPlaceMutationFn = ApolloReactCommon.MutationFunction<
-  AddPlaceMutation,
-  AddPlaceMutationVariables
->;
 
 /**
- * __useAddPlaceMutation__
+ * __usePlacesQuery__
  *
- * To run a mutation, you first call `useAddPlaceMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddPlaceMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
+ * To run a query within a React component, call `usePlacesQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePlacesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const [addPlaceMutation, { data, loading, error }] = useAddPlaceMutation({
+ * const { data, loading, error } = usePlacesQuery({
  *   variables: {
- *      title: // value for 'title'
- *      description: // value for 'description'
  *   },
  * });
  */
-export function useAddPlaceMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
-    AddPlaceMutation,
-    AddPlaceMutationVariables
+export function usePlacesQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    PlacesQuery,
+    PlacesQueryVariables
   >
 ) {
-  return ApolloReactHooks.useMutation<
-    AddPlaceMutation,
-    AddPlaceMutationVariables
-  >(AddPlaceDocument, baseOptions);
+  return ApolloReactHooks.useQuery<PlacesQuery, PlacesQueryVariables>(
+    PlacesDocument,
+    baseOptions
+  );
 }
-export type AddPlaceMutationHookResult = ReturnType<typeof useAddPlaceMutation>;
-export type AddPlaceMutationResult = ApolloReactCommon.MutationResult<
-  AddPlaceMutation
->;
-export type AddPlaceMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  AddPlaceMutation,
-  AddPlaceMutationVariables
+export function usePlacesLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    PlacesQuery,
+    PlacesQueryVariables
+  >
+) {
+  return ApolloReactHooks.useLazyQuery<PlacesQuery, PlacesQueryVariables>(
+    PlacesDocument,
+    baseOptions
+  );
+}
+export type PlacesQueryHookResult = ReturnType<typeof usePlacesQuery>;
+export type PlacesLazyQueryHookResult = ReturnType<typeof usePlacesLazyQuery>;
+export type PlacesQueryResult = ApolloReactCommon.QueryResult<
+  PlacesQuery,
+  PlacesQueryVariables
 >;

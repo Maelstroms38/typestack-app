@@ -34,3 +34,4 @@ export const apolloClient = new ApolloClient({
 });
 
 export * from './graphql-hooks';
+export * from './createPlaceMutationOptions';
