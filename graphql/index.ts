@@ -1,36 +1,47 @@
-import { useRef, useEffect } from 'react';
-import { parse } from 'url';
-import ApolloClient from 'apollo-boost';
+import ApolloClient from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { HttpLink } from 'apollo-link-http';
+import { AsyncStorage } from 'react-native';
+import { ApolloLink, Observable } from 'apollo-link';
 
-export const validateUrl = (url: string) => {
-  if (!url) {
-    return undefined;
-  }
+const link = new HttpLink({
+  uri: 'http://localhost:4000/graphql',
+  credentials: 'include'
+});
 
-  try {
-    const uu = parse(url);
-    if (uu.protocol === 'http:' || uu.protocol === 'https:') {
-      return url;
+const request = async operation => {
+  const token = await AsyncStorage.getItem('token');
+  operation.setContext({
+    headers: {
+      authorization: token
     }
-  } catch {
-    return undefined;
-  }
-
-  return undefined;
+  });
 };
 
-export const usePrevious = <T>(value: T) => {
-  const ref = useRef<T>();
+const requestLink = new ApolloLink(
+  (operation, forward) =>
+    new Observable(observer => {
+      let handle;
+      Promise.resolve(operation)
+        .then(oper => request(oper))
+        .then(() => {
+          handle = forward(operation).subscribe({
+            next: observer.next.bind(observer),
+            error: observer.error.bind(observer),
+            complete: observer.complete.bind(observer)
+          });
+        })
+        .catch(observer.error.bind(observer));
 
-  useEffect(() => {
-    ref.current = value;
-  }, [value]);
-
-  return ref.current;
-};
+      return () => {
+        if (handle) handle.unsubscribe();
+      };
+    })
+);
 
 export const apolloClient = new ApolloClient({
-  uri: 'http://localhost:4000/graphql'
+  cache: new InMemoryCache(),
+  link: ApolloLink.from([requestLink, link])
 });
 
 export * from './graphql-hooks';
