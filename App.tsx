@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { apolloClient } from './graphql';
-import { Places } from './src/screens';
+import { AppNavigator } from './src/navigation';
 
 const theme = {
   ...DefaultTheme,
@@ -21,7 +21,7 @@ export default function App() {
       <ApolloProvider client={apolloClient}>
         <PaperProvider theme={theme}>
           <View style={styles.container}>
-            <Places />
+            <AppNavigator />
           </View>
         </PaperProvider>
       </ApolloProvider>

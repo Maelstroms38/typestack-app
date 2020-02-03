@@ -1,3 +1,4 @@
 import Places from './Places';
+import PlaceDetail from './PlaceDetail';
 
-export { Places };
+export { Places, PlaceDetail };
