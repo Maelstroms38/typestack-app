@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   Dimensions,
   AsyncStorage,
-  ScrollView,
-  Alert
+  ScrollView
 } from 'react-native';
+import { useSignUpMutation, useSignInMutation } from '../../graphql';
 import { Button, TextInput } from 'react-native-paper';
-import { useMutation } from '@apollo/react-hooks';
-import { Ionicons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
 
@@ -21,31 +18,31 @@ export default function LoginScreen(props) {
   const [email, setEmail] = useState('');
   const [login, setLogin] = useState(false);
 
-  // Signing In
-  //   const [signIn] = useMutation(SIGNIN_MUTATION, {
-  //     async onCompleted({ signIn }) {
-  //       const { token } = signIn;
-  //       try {
-  //         await AsyncStorage.setItem('token', token);
-  //         navigation.replace('Profile');
-  //       } catch (err) {
-  //         console.log(err.message);
-  //       }
-  //     }
-  //   });
-
   // Signing Up
-  //   const [signUp, { data: signedUp }] = useMutation(SIGNUP_MUTATION, {
-  //     async onCompleted({ signUp }) {
-  //       const { token } = signUp;
-  //       try {
-  //         await AsyncStorage.setItem('token', token);
-  //         navigation.replace('Profile');
-  //       } catch (err) {
-  //         console.log(err.message);
-  //       }
-  //     }
-  //   });
+  const [signUpMutation] = useSignUpMutation({
+    async onCompleted({ register }) {
+      const { token } = register;
+      try {
+        await AsyncStorage.setItem('token', token);
+        navigation.replace('Profile');
+      } catch (err) {
+        console.log(err.message);
+      }
+    }
+  });
+
+  // Signing In
+  const [signInMutation] = useSignInMutation({
+    async onCompleted({ login }) {
+      const { token } = login;
+      try {
+        await AsyncStorage.setItem('token', token);
+        navigation.replace('Profile');
+      } catch (err) {
+        console.log(err.message);
+      }
+    }
+  });
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -87,29 +84,18 @@ export default function LoginScreen(props) {
           labelStyle={{ color: '#fff' }}
           style={{ backgroundColor: 'rgba(75, 148, 214, 1)', marginTop: 20 }}
           onPress={() => {
-            // TextInput validation
-            let nullValues = [];
-            if (!email) {
-              nullValues.push('Email');
-            }
-            if (!username && !login) {
-              nullValues.push('Username');
-            }
-            if (!password) {
-              nullValues.push('Password');
-            }
-            if (nullValues.length) {
-              Alert.alert(`Please fill in ${nullValues.join(', ')}`);
+            if (login) {
+              // email validation
+              const isEmail = email.includes('@');
+              isEmail
+                ? signInMutation({
+                    variables: { email, password }
+                  })
+                : signInMutation({
+                    variables: { username: email, password }
+                  });
             } else {
-              if (login) {
-                // email validation
-                const isEmail = email.includes('@');
-                //   const res = isEmail
-                //     ? signIn({ variables: { email, password } })
-                //     : signIn({ variables: { username: email, password } });
-              } else {
-                // signUp({ variables: { email, username, password } });
-              }
+              signUpMutation({ variables: { email, username, password } });
             }
           }}
         >

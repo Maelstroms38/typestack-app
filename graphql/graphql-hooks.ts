@@ -117,6 +117,25 @@ export type CreatePlaceMutation = (
   ) }
 );
 
+export type SignInMutationVariables = {
+  username?: Maybe<Scalars['String']>,
+  email?: Maybe<Scalars['String']>,
+  password: Scalars['String']
+};
+
+
+export type SignInMutation = (
+  { __typename?: 'Mutation' }
+  & { login: (
+    { __typename?: 'UserResponse' }
+    & Pick<UserResponse, 'token'>
+    & { user: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'email'>
+    )> }
+  ) }
+);
+
 export type PlaceQueryVariables = {
   id: Scalars['Float']
 };
@@ -143,6 +162,25 @@ export type PlacesQuery = (
       & Pick<User, 'id' | 'username'>
     ) }
   )> }
+);
+
+export type SignUpMutationVariables = {
+  username: Scalars['String'],
+  email: Scalars['String'],
+  password: Scalars['String']
+};
+
+
+export type SignUpMutation = (
+  { __typename?: 'Mutation' }
+  & { register: (
+    { __typename?: 'UserResponse' }
+    & Pick<UserResponse, 'token'>
+    & { user: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'email'>
+    )> }
+  ) }
 );
 
 
@@ -184,6 +222,45 @@ export function useCreatePlaceMutation(baseOptions?: ApolloReactHooks.MutationHo
 export type CreatePlaceMutationHookResult = ReturnType<typeof useCreatePlaceMutation>;
 export type CreatePlaceMutationResult = ApolloReactCommon.MutationResult<CreatePlaceMutation>;
 export type CreatePlaceMutationOptions = ApolloReactCommon.BaseMutationOptions<CreatePlaceMutation, CreatePlaceMutationVariables>;
+export const SignInDocument = gql`
+    mutation SignIn($username: String, $email: String, $password: String!) {
+  login(input: {username: $username, email: $email, password: $password}) {
+    token
+    user {
+      id
+      username
+      email
+    }
+  }
+}
+    `;
+export type SignInMutationFn = ApolloReactCommon.MutationFunction<SignInMutation, SignInMutationVariables>;
+
+/**
+ * __useSignInMutation__
+ *
+ * To run a mutation, you first call `useSignInMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSignInMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [signInMutation, { data, loading, error }] = useSignInMutation({
+ *   variables: {
+ *      username: // value for 'username'
+ *      email: // value for 'email'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useSignInMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SignInMutation, SignInMutationVariables>) {
+        return ApolloReactHooks.useMutation<SignInMutation, SignInMutationVariables>(SignInDocument, baseOptions);
+      }
+export type SignInMutationHookResult = ReturnType<typeof useSignInMutation>;
+export type SignInMutationResult = ApolloReactCommon.MutationResult<SignInMutation>;
+export type SignInMutationOptions = ApolloReactCommon.BaseMutationOptions<SignInMutation, SignInMutationVariables>;
 export const PlaceDocument = gql`
     query Place($id: Float!) {
   place(id: $id) {
@@ -261,3 +338,42 @@ export function usePlacesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookO
 export type PlacesQueryHookResult = ReturnType<typeof usePlacesQuery>;
 export type PlacesLazyQueryHookResult = ReturnType<typeof usePlacesLazyQuery>;
 export type PlacesQueryResult = ApolloReactCommon.QueryResult<PlacesQuery, PlacesQueryVariables>;
+export const SignUpDocument = gql`
+    mutation SignUp($username: String!, $email: String!, $password: String!) {
+  register(input: {username: $username, email: $email, password: $password}) {
+    token
+    user {
+      id
+      username
+      email
+    }
+  }
+}
+    `;
+export type SignUpMutationFn = ApolloReactCommon.MutationFunction<SignUpMutation, SignUpMutationVariables>;
+
+/**
+ * __useSignUpMutation__
+ *
+ * To run a mutation, you first call `useSignUpMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSignUpMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [signUpMutation, { data, loading, error }] = useSignUpMutation({
+ *   variables: {
+ *      username: // value for 'username'
+ *      email: // value for 'email'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useSignUpMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SignUpMutation, SignUpMutationVariables>) {
+        return ApolloReactHooks.useMutation<SignUpMutation, SignUpMutationVariables>(SignUpDocument, baseOptions);
+      }
+export type SignUpMutationHookResult = ReturnType<typeof useSignUpMutation>;
+export type SignUpMutationResult = ApolloReactCommon.MutationResult<SignUpMutation>;
+export type SignUpMutationOptions = ApolloReactCommon.BaseMutationOptions<SignUpMutation, SignUpMutationVariables>;
