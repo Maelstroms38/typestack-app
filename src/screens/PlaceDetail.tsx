@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native';
 import { CardView } from '../components';
 
@@ -7,8 +8,8 @@ interface Props {
 }
 
 const PlaceDetail: React.FC<Props> = props => {
-  const { navigation } = props;
-  const { item } = navigation.state.params;
+  const route = useRoute();
+  const { item } = route.params as any;
   return (
     <SafeAreaView>
       <CardView {...(item as any)} />
