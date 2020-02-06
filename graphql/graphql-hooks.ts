@@ -221,7 +221,7 @@ export type UpdatePlaceMutation = (
   { __typename?: 'Mutation' }
   & { updatePlace: (
     { __typename?: 'Place' }
-    & Pick<Place, 'title' | 'description' | 'imageUrl' | 'creationDate'>
+    & Pick<Place, 'id' | 'title' | 'description' | 'imageUrl' | 'creationDate'>
   ) }
 );
 
@@ -492,6 +492,7 @@ export type SignUpMutationOptions = ApolloReactCommon.BaseMutationOptions<SignUp
 export const UpdatePlaceDocument = gql`
     mutation UpdatePlace($id: Float!, $title: String!, $description: String!, $imageUrl: String!) {
   updatePlace(place: {id: $id, title: $title, description: $description, imageUrl: $imageUrl}) {
+    id
     title
     description
     imageUrl

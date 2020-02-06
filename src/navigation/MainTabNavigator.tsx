@@ -41,8 +41,6 @@ export const ProfileStack = () => {
       <Stack.Screen name="Auth" component={AuthLoading} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Profile" component={Profile} />
-      <Stack.Screen name="Detail" component={PlaceDetail} />
-      <Stack.Screen name="Form" component={Form} />
     </Stack.Navigator>
   );
 };

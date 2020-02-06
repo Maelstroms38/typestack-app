@@ -22,7 +22,6 @@ export default function LoginScreen(props) {
   // Create Place
   const [createPlaceMutation] = useCreatePlaceMutation({
     async onCompleted({ createPlace }) {
-      console.log('created place: ' + createPlace);
       navigation.goBack();
     }
   });
@@ -30,7 +29,6 @@ export default function LoginScreen(props) {
   // Update Place
   const [updatePlaceMutation] = useUpdatePlaceMutation({
     async onCompleted({ updatePlace }) {
-      console.log('saved place: ' + updatePlace);
       navigation.navigate('Detail', { item: updatePlace });
     }
   });
@@ -38,7 +36,6 @@ export default function LoginScreen(props) {
   // Delete Place
   const [deletePlaceMutation] = useDeletePlaceMutation({
     async onCompleted(id) {
-      console.log('deleted place: #' + id);
       navigation.navigate('Profile');
     }
   });
@@ -90,7 +87,12 @@ export default function LoginScreen(props) {
           onPress={() =>
             item.id
               ? updatePlaceMutation({
-                  variables: { id: item.id, title, description, imageUrl }
+                  variables: {
+                    id: parseInt(item.id),
+                    title,
+                    description,
+                    imageUrl
+                  }
                 })
               : createPlaceMutation({
                   variables: { title, description, imageUrl }
@@ -105,7 +107,9 @@ export default function LoginScreen(props) {
             backgroundColor: theme.colors.accent,
             marginTop: 20
           }}
-          onPress={() => deletePlaceMutation({ variables: { id: item.id } })}
+          onPress={() =>
+            deletePlaceMutation({ variables: { id: parseInt(item.id) } })
+          }
         >
           Delete Place
         </Button>

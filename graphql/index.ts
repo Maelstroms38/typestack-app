@@ -40,8 +40,8 @@ const requestLink = new ApolloLink(
 );
 
 export const apolloClient = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: ApolloLink.from([requestLink, link])
+  link: ApolloLink.from([requestLink, link]),
+  cache: new InMemoryCache()
 });
 
 export * from './graphql-hooks';
