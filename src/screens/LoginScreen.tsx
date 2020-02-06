@@ -23,11 +23,13 @@ export default function LoginScreen(props) {
   const [signUpMutation] = useSignUpMutation({
     async onCompleted({ register }) {
       const { token } = register;
-      try {
-        await AsyncStorage.setItem('token', token);
-        navigation.replace('Profile');
-      } catch (err) {
-        console.log(err.message);
+      if (token) {
+        try {
+          await AsyncStorage.setItem('token', token);
+          navigation.replace('Profile');
+        } catch (err) {
+          console.log(err.message);
+        }
       }
     }
   });
@@ -36,11 +38,13 @@ export default function LoginScreen(props) {
   const [signInMutation] = useSignInMutation({
     async onCompleted({ login }) {
       const { token } = login;
-      try {
-        await AsyncStorage.setItem('token', token);
-        navigation.replace('Profile');
-      } catch (err) {
-        console.log(err.message);
+      if (token) {
+        try {
+          await AsyncStorage.setItem('token', token);
+          navigation.replace('Profile');
+        } catch (err) {
+          console.log(err.message);
+        }
       }
     }
   });

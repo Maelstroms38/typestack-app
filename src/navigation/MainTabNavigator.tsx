@@ -4,7 +4,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import { Places } from '../screens';
 import { useTheme, Portal, FAB } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
-import { PlaceDetail, AuthLoading, Login, Profile } from '../screens';
+import { PlaceDetail, AuthLoading, Login, Profile, Form } from '../screens';
 import { Header } from './Header';
 
 const Stack = createStackNavigator();
@@ -22,6 +22,7 @@ export const PlaceStack = () => {
     >
       <Stack.Screen name="Places" component={Places} />
       <Stack.Screen name="Detail" component={PlaceDetail} />
+      <Stack.Screen name="Form" component={Form} />
     </Stack.Navigator>
   );
 };
@@ -41,13 +42,14 @@ export const ProfileStack = () => {
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="Detail" component={PlaceDetail} />
+      <Stack.Screen name="Form" component={Form} />
     </Stack.Navigator>
   );
 };
 
 const Tab = createMaterialBottomTabNavigator();
 
-export const MainTabNavigator = () => {
+export const MainTabNavigator = ({ navigation }) => {
   const isFocused = useIsFocused();
   const theme = useTheme();
   return (
@@ -76,7 +78,7 @@ export const MainTabNavigator = () => {
         <FAB
           visible={isFocused}
           icon="feather"
-          onPress={() => console.log('pressed FAB')}
+          onPress={() => navigation.navigate('Form', { item: {} })}
           style={{
             backgroundColor: theme.colors.background,
             position: 'absolute',

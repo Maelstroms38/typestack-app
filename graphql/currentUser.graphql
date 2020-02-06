@@ -8,11 +8,6 @@ query CurrentUser {
       title
       description
       imageUrl
-      user {
-        id
-        username
-        email
-      }
     }
   }
 }
