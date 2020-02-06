@@ -66,7 +66,7 @@ export type Place = {
   description?: Maybe<Scalars['String']>,
   imageUrl?: Maybe<Scalars['String']>,
   creationDate: Scalars['DateTime'],
-  user: User,
+  user?: Maybe<User>,
 };
 
 export type PlaceInput = {
@@ -80,6 +80,7 @@ export type Query = {
    __typename?: 'Query',
   place?: Maybe<Place>,
   places: Array<Place>,
+  currentUser: User,
 };
 
 
@@ -114,6 +115,25 @@ export type CreatePlaceMutation = (
   & { createPlace: (
     { __typename?: 'Place' }
     & Pick<Place, 'id' | 'title' | 'description' | 'imageUrl' | 'creationDate'>
+  ) }
+);
+
+export type CurrentUserQueryVariables = {};
+
+
+export type CurrentUserQuery = (
+  { __typename?: 'Query' }
+  & { currentUser: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username' | 'email'>
+    & { places: Array<(
+      { __typename?: 'Place' }
+      & Pick<Place, 'id' | 'title' | 'description' | 'imageUrl'>
+      & { user: Maybe<(
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username' | 'email'>
+      )> }
+    )> }
   ) }
 );
 
@@ -157,10 +177,10 @@ export type PlacesQuery = (
   & { places: Array<(
     { __typename?: 'Place' }
     & Pick<Place, 'id' | 'title' | 'description' | 'imageUrl' | 'creationDate'>
-    & { user: (
+    & { user: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username'>
-    ) }
+    )> }
   )> }
 );
 
@@ -222,6 +242,51 @@ export function useCreatePlaceMutation(baseOptions?: ApolloReactHooks.MutationHo
 export type CreatePlaceMutationHookResult = ReturnType<typeof useCreatePlaceMutation>;
 export type CreatePlaceMutationResult = ApolloReactCommon.MutationResult<CreatePlaceMutation>;
 export type CreatePlaceMutationOptions = ApolloReactCommon.BaseMutationOptions<CreatePlaceMutation, CreatePlaceMutationVariables>;
+export const CurrentUserDocument = gql`
+    query CurrentUser {
+  currentUser {
+    id
+    username
+    email
+    places {
+      id
+      title
+      description
+      imageUrl
+      user {
+        id
+        username
+        email
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useCurrentUserQuery__
+ *
+ * To run a query within a React component, call `useCurrentUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCurrentUserQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCurrentUserQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+        return ApolloReactHooks.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, baseOptions);
+      }
+export function useCurrentUserLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, baseOptions);
+        }
+export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
+export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
+export type CurrentUserQueryResult = ApolloReactCommon.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
 export const SignInDocument = gql`
     mutation SignIn($username: String, $email: String, $password: String!) {
   login(input: {username: $username, email: $email, password: $password}) {

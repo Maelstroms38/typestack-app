@@ -7,11 +7,12 @@ import {
   ScrollView
 } from 'react-native';
 import { useSignUpMutation, useSignInMutation } from '../../graphql';
-import { Button, TextInput } from 'react-native-paper';
+import { Button, TextInput, useTheme } from 'react-native-paper';
 
 const { width } = Dimensions.get('window');
 
 export default function LoginScreen(props) {
+  const theme = useTheme();
   const { navigation } = props;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -45,7 +46,12 @@ export default function LoginScreen(props) {
   });
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={[
+        styles.container,
+        { backgroundColor: theme.colors.background }
+      ]}
+    >
       {login ? null : (
         <TextInput
           onChangeText={text => setUsername(text)}
@@ -81,8 +87,11 @@ export default function LoginScreen(props) {
       />
       <View style={styles.buttonContainer}>
         <Button
-          labelStyle={{ color: '#fff' }}
-          style={{ backgroundColor: 'rgba(75, 148, 214, 1)', marginTop: 20 }}
+          labelStyle={{ color: theme.colors.text }}
+          style={{
+            backgroundColor: theme.colors.accent,
+            marginTop: 20
+          }}
           onPress={() => {
             if (login) {
               // email validation
@@ -102,8 +111,7 @@ export default function LoginScreen(props) {
           {login ? 'Login' : 'Sign Up'}
         </Button>
         <Button
-          labelStyle={{ color: 'rgba(75, 148, 214, 1)' }}
-          style={{ backgroundColor: '#fff', marginTop: 20 }}
+          style={{ marginTop: 20 }}
           onPress={() => {
             setLogin(!login);
           }}
@@ -126,8 +134,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     paddingHorizontal: 15,
-    paddingVertical: 20,
-    backgroundColor: '#fff'
+    paddingVertical: 20
   },
   input: {
     width: width - 40,

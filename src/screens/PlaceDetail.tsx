@@ -10,6 +10,7 @@ interface Props {
 const PlaceDetail: React.FC<Props> = props => {
   const route = useRoute();
   const { item } = route.params as any;
+
   return (
     <SafeAreaView>
       <CardView {...(item as any)} />

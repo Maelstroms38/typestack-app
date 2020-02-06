@@ -1,11 +1,10 @@
 import React from 'react';
-import { Platform, AsyncStorage } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { Places } from '../screens';
 import { useTheme, Portal, FAB } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
-import { PlaceDetail, AuthLoading, Login } from '../screens';
+import { PlaceDetail, AuthLoading, Login, Profile } from '../screens';
 import { Header } from './Header';
 
 const Stack = createStackNavigator();
@@ -40,6 +39,8 @@ export const ProfileStack = () => {
     >
       <Stack.Screen name="Auth" component={AuthLoading} />
       <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="Detail" component={PlaceDetail} />
     </Stack.Navigator>
   );
 };

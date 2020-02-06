@@ -1,6 +1,6 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
-import { Appbar, Avatar, useTheme } from 'react-native-paper';
+import { AsyncStorage, TouchableOpacity } from 'react-native';
+import { Appbar, useTheme } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export const Header = ({ scene, previous, navigation }) => {
@@ -12,7 +12,6 @@ export const Header = ({ scene, previous, navigation }) => {
       : options.title !== undefined
       ? options.title
       : scene.route.name;
-
   return (
     <Appbar.Header theme={{ colors: { primary: theme.colors.primary } }}>
       {previous ? (
@@ -42,6 +41,15 @@ export const Header = ({ scene, previous, navigation }) => {
           )
         }
       />
+      {title == 'Profile' && (
+        <Appbar.Action
+          icon="logout"
+          onPress={async () => {
+            await AsyncStorage.removeItem('token');
+            navigation.replace('Login');
+          }}
+        />
+      )}
     </Appbar.Header>
   );
 };

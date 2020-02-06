@@ -1,0 +1,18 @@
+query CurrentUser {
+  currentUser {
+    id
+    username
+    email
+    places {
+      id
+      title
+      description
+      imageUrl
+      user {
+        id
+        username
+        email
+      }
+    }
+  }
+}
