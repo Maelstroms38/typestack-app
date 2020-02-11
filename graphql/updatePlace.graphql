@@ -1,6 +1,6 @@
 mutation UpdatePlace(
-  $id: String
-  $title: String
+  $id: Float
+  $title: String!
   $description: String
   $imageUrl: String
 ) {

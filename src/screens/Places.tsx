@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SafeAreaView, FlatList, Button } from 'react-native';
-import { usePlacesQuery, useCreatePlaceMutation } from '../../graphql';
+import { usePlacesQuery, NewPlaceAddedDocument } from '../../graphql';
 import { CardView } from '../components';
 
 interface Props {
@@ -8,28 +8,26 @@ interface Props {
 }
 
 const Places: React.FC<Props> = props => {
-  const { data, refetch } = usePlacesQuery();
-  const [createPlace] = useCreatePlaceMutation();
+  const { data, subscribeToMore } = usePlacesQuery();
   const { navigation } = props;
+
+  useEffect(() => {
+    subscribeToMore({
+      document: NewPlaceAddedDocument,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const newPlace = (subscriptionData.data as any).newPlaceAdded;
+        // add new place
+        return Object.assign({}, prev, {
+          places: [newPlace, ...prev.places]
+        });
+      }
+    });
+  }, []);
+
   return (
     <SafeAreaView>
       <FlatList
-        ListFooterComponent={() => (
-          <Button
-            title="Add New Place"
-            onPress={() => {
-              createPlace({
-                variables: {
-                  title: `Place #${data.places.length + 1}`,
-                  description: '',
-                  imageUrl: ''
-                }
-              })
-                .then(() => refetch())
-                .catch(err => console.log(err));
-            }}
-          />
-        )}
         data={data && data.places ? data.places : []}
         keyExtractor={item => `${item.id}`}
         renderItem={({ item }) => (
