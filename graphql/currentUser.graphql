@@ -3,11 +3,21 @@ query CurrentUser {
     id
     username
     email
-    places {
-      id
-      title
-      description
-      imageUrl
+    isStaff
+    isSuperuser
+    firstName
+    lastName
+    reviewSet {
+      value
+      comment
+      pubDate
+      book {
+        title
+        author {
+          firstName
+          lastName
+        }
+      }
     }
   }
 }

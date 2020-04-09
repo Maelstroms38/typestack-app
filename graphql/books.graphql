@@ -1,0 +1,26 @@
+query Books {
+  books {
+    id
+    title
+    author {
+      firstName
+      lastName
+    }
+    summary
+    isbn
+    genre {
+      name
+    }
+    language {
+      name
+    }
+    image
+    reviewSet {
+      user {
+        username
+      }
+      comment
+      pubDate
+    }
+  }
+}

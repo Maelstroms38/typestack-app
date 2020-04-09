@@ -1,8 +1,8 @@
-import Places from './Places';
-import PlaceDetail from './PlaceDetail';
+import Books from './Books';
+import BookDetail from './PlaceDetail';
 import AuthLoading from './AuthLoading';
 import Login from './LoginScreen';
 import Profile from './ProfileScreen';
-import Form from './PlaceForm';
+import Form from './BookForm';
 
-export { Places, PlaceDetail, AuthLoading, Login, Profile, Form };
+export { Books, BookDetail, AuthLoading, Login, Profile, Form };

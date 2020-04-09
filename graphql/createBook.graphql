@@ -1,0 +1,28 @@
+mutation CreateBook(
+  $title: String!
+  $summary: String!
+  $isbn: String!
+  $language: ID!
+  $author: ID!
+  $image: String!
+) {
+  createBook(
+    input: {
+      title: $title
+      summary: $summary
+      isbn: $isbn
+      image: $image
+      language: $language
+      author: $author
+    }
+  ) {
+    book {
+      title
+      author {
+        firstName
+        lastName
+      }
+      image
+    }
+  }
+}

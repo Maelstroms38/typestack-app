@@ -1,9 +1,0 @@
-query Place($id: Float!) {
-  place(id: $id) {
-    id
-    title
-    description
-    imageUrl
-    creationDate
-  }
-}

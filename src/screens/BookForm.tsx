@@ -10,7 +10,7 @@ import { Button, TextInput, useTheme } from 'react-native-paper';
 
 const { width } = Dimensions.get('window');
 
-export default function LoginScreen(props) {
+export default function PlaceForm(props) {
   const theme = useTheme();
   const route = useRoute();
   const { navigation } = props;

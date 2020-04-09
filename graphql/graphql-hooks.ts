@@ -10,117 +10,323 @@ export type Scalars = {
   Int: number,
   Float: number,
   DateTime: any,
+  Date: any,
+  GenericScalar: any,
 };
 
-export type AuthInput = {
-  email?: Maybe<Scalars['String']>,
-  username?: Maybe<Scalars['String']>,
-  password: Scalars['String'],
+export type AuthorType = {
+   __typename?: 'AuthorType',
+  id: Scalars['ID'],
+  firstName: Scalars['String'],
+  lastName: Scalars['String'],
+  dateOfBirth?: Maybe<Scalars['Date']>,
+  dateOfDeath?: Maybe<Scalars['Date']>,
+  bookSet: Array<BookType>,
+};
+
+export type BookCreate = {
+   __typename?: 'BookCreate',
+  book?: Maybe<BookType>,
+};
+
+export type BookDelete = {
+   __typename?: 'BookDelete',
+  ok?: Maybe<Scalars['Boolean']>,
+};
+
+export type BookInputType = {
+  title?: Maybe<Scalars['String']>,
+  summary?: Maybe<Scalars['String']>,
+  isbn?: Maybe<Scalars['String']>,
+  image?: Maybe<Scalars['String']>,
+  language?: Maybe<Scalars['ID']>,
+  author?: Maybe<Scalars['ID']>,
+};
+
+export type BookType = {
+   __typename?: 'BookType',
+  id: Scalars['ID'],
+  title: Scalars['String'],
+  author?: Maybe<AuthorType>,
+  summary: Scalars['String'],
+  isbn: Scalars['String'],
+  genre: Array<GenreType>,
+  language?: Maybe<LanguageType>,
+  image: Scalars['String'],
+  reviewSet: Array<ReviewType>,
 };
 
 
-export type FieldError = {
-   __typename?: 'FieldError',
-  path: Scalars['String'],
-  message: Scalars['String'],
+
+
+export type GenreType = {
+   __typename?: 'GenreType',
+  id: Scalars['ID'],
+  name: Scalars['String'],
+  bookSet: Array<BookType>,
+};
+
+export type LanguageType = {
+   __typename?: 'LanguageType',
+  id: Scalars['ID'],
+  name: Scalars['String'],
+  bookSet: Array<BookType>,
 };
 
 export type Mutation = {
    __typename?: 'Mutation',
-  createPlace: Place,
-  updatePlace: Place,
-  deletePlace: Scalars['String'],
-  register: UserResponse,
-  login: UserResponse,
+  userCreate?: Maybe<UserCreate>,
+  tokenAuth?: Maybe<ObtainJsonWebToken>,
+  verifyToken?: Maybe<Verify>,
+  refreshToken?: Maybe<Refresh>,
+  createReview?: Maybe<ReviewCreate>,
+  deleteReview?: Maybe<ReviewDelete>,
+  createBook?: Maybe<BookCreate>,
+  deleteBook?: Maybe<BookDelete>,
 };
 
 
-export type MutationCreatePlaceArgs = {
-  place: PlaceInput
+export type MutationUserCreateArgs = {
+  email: Scalars['String'],
+  password: Scalars['String'],
+  username: Scalars['String']
 };
 
 
-export type MutationUpdatePlaceArgs = {
-  place: PlaceInput
+export type MutationTokenAuthArgs = {
+  username: Scalars['String'],
+  password: Scalars['String']
 };
 
 
-export type MutationDeletePlaceArgs = {
-  id: Scalars['Float']
+export type MutationVerifyTokenArgs = {
+  token?: Maybe<Scalars['String']>
 };
 
 
-export type MutationRegisterArgs = {
-  input: AuthInput
+export type MutationRefreshTokenArgs = {
+  token?: Maybe<Scalars['String']>
 };
 
 
-export type MutationLoginArgs = {
-  input: AuthInput
+export type MutationCreateReviewArgs = {
+  input: ReviewInputType
 };
 
-export type Place = {
-   __typename?: 'Place',
-  id: Scalars['ID'],
-  title: Scalars['String'],
-  description?: Maybe<Scalars['String']>,
-  imageUrl?: Maybe<Scalars['String']>,
-  creationDate?: Maybe<Scalars['DateTime']>,
-  user?: Maybe<User>,
+
+export type MutationDeleteReviewArgs = {
+  id: Scalars['ID']
 };
 
-export type PlaceInput = {
-  id?: Maybe<Scalars['Float']>,
-  title: Scalars['String'],
-  description?: Maybe<Scalars['String']>,
-  imageUrl?: Maybe<Scalars['String']>,
+
+export type MutationCreateBookArgs = {
+  input: BookInputType
+};
+
+
+export type MutationDeleteBookArgs = {
+  id: Scalars['ID']
+};
+
+export type ObtainJsonWebToken = {
+   __typename?: 'ObtainJSONWebToken',
+  payload: Scalars['GenericScalar'],
+  refreshExpiresIn: Scalars['Int'],
+  token: Scalars['String'],
 };
 
 export type Query = {
    __typename?: 'Query',
-  place?: Maybe<Place>,
-  places: Array<Place>,
-  currentUser: User,
+  currentUser?: Maybe<UserType>,
+  books?: Maybe<Array<Maybe<BookType>>>,
+  book?: Maybe<BookType>,
+  authors?: Maybe<Array<Maybe<AuthorType>>>,
+  author?: Maybe<AuthorType>,
 };
 
 
-export type QueryPlaceArgs = {
-  id: Scalars['Float']
+export type QueryBooksArgs = {
+  search?: Maybe<Scalars['String']>,
+  limit?: Maybe<Scalars['Int']>,
+  offset?: Maybe<Scalars['Int']>
 };
 
-export type Subscription = {
-   __typename?: 'Subscription',
-  newPlaceAdded: Place,
+
+export type QueryBookArgs = {
+  id: Scalars['ID']
 };
 
-export type User = {
-   __typename?: 'User',
-  id: Scalars['Float'],
+
+export type QueryAuthorArgs = {
+  id: Scalars['ID']
+};
+
+export type Refresh = {
+   __typename?: 'Refresh',
+  payload: Scalars['GenericScalar'],
+  refreshExpiresIn: Scalars['Int'],
+  token: Scalars['String'],
+};
+
+export type ReviewCreate = {
+   __typename?: 'ReviewCreate',
+  review?: Maybe<ReviewType>,
+};
+
+export type ReviewDelete = {
+   __typename?: 'ReviewDelete',
+  ok?: Maybe<Scalars['Boolean']>,
+};
+
+export type ReviewInputType = {
+  user?: Maybe<Scalars['ID']>,
+  comment?: Maybe<Scalars['String']>,
+  value?: Maybe<Scalars['Int']>,
+  book?: Maybe<Scalars['ID']>,
+};
+
+export type ReviewType = {
+   __typename?: 'ReviewType',
+  id: Scalars['ID'],
+  book: BookType,
+  user: UserType,
+  pubDate: Scalars['DateTime'],
+  comment: Scalars['String'],
+  value: ReviewValue,
+};
+
+export enum ReviewValue {
+  A_5 = 'A_5',
+  A_4 = 'A_4',
+  A_3 = 'A_3',
+  A_2 = 'A_2',
+  A_1 = 'A_1'
+}
+
+export type UserCreate = {
+   __typename?: 'UserCreate',
+  user?: Maybe<UserType>,
+};
+
+export type UserType = {
+   __typename?: 'UserType',
+  id: Scalars['ID'],
+  lastLogin?: Maybe<Scalars['DateTime']>,
+  isSuperuser: Scalars['Boolean'],
+  username: Scalars['String'],
+  firstName: Scalars['String'],
+  lastName: Scalars['String'],
+  email: Scalars['String'],
+  isStaff: Scalars['Boolean'],
+  isActive: Scalars['Boolean'],
+  dateJoined: Scalars['DateTime'],
+  reviewSet: Array<ReviewType>,
+};
+
+export type Verify = {
+   __typename?: 'Verify',
+  payload: Scalars['GenericScalar'],
+};
+
+export type BookQueryVariables = {
+  id: Scalars['ID']
+};
+
+
+export type BookQuery = (
+  { __typename?: 'Query' }
+  & { book: Maybe<(
+    { __typename?: 'BookType' }
+    & Pick<BookType, 'id' | 'title' | 'summary' | 'isbn' | 'image'>
+    & { author: Maybe<(
+      { __typename?: 'AuthorType' }
+      & Pick<AuthorType, 'firstName' | 'lastName'>
+    )>, genre: Array<(
+      { __typename?: 'GenreType' }
+      & Pick<GenreType, 'name'>
+    )>, language: Maybe<(
+      { __typename?: 'LanguageType' }
+      & Pick<LanguageType, 'name'>
+    )>, reviewSet: Array<(
+      { __typename?: 'ReviewType' }
+      & Pick<ReviewType, 'comment' | 'pubDate'>
+      & { user: (
+        { __typename?: 'UserType' }
+        & Pick<UserType, 'username'>
+      ) }
+    )> }
+  )> }
+);
+
+export type BooksQueryVariables = {};
+
+
+export type BooksQuery = (
+  { __typename?: 'Query' }
+  & { books: Maybe<Array<Maybe<(
+    { __typename?: 'BookType' }
+    & Pick<BookType, 'id' | 'title' | 'summary' | 'isbn' | 'image'>
+    & { author: Maybe<(
+      { __typename?: 'AuthorType' }
+      & Pick<AuthorType, 'firstName' | 'lastName'>
+    )>, genre: Array<(
+      { __typename?: 'GenreType' }
+      & Pick<GenreType, 'name'>
+    )>, language: Maybe<(
+      { __typename?: 'LanguageType' }
+      & Pick<LanguageType, 'name'>
+    )>, reviewSet: Array<(
+      { __typename?: 'ReviewType' }
+      & Pick<ReviewType, 'comment' | 'pubDate'>
+      & { user: (
+        { __typename?: 'UserType' }
+        & Pick<UserType, 'username'>
+      ) }
+    )> }
+  )>>> }
+);
+
+export type CreateBookMutationVariables = {
+  title: Scalars['String'],
+  summary: Scalars['String'],
+  isbn: Scalars['String'],
+  language: Scalars['ID'],
+  author: Scalars['ID'],
+  image: Scalars['String']
+};
+
+
+export type CreateBookMutation = (
+  { __typename?: 'Mutation' }
+  & { createBook: Maybe<(
+    { __typename?: 'BookCreate' }
+    & { book: Maybe<(
+      { __typename?: 'BookType' }
+      & Pick<BookType, 'title' | 'image'>
+      & { author: Maybe<(
+        { __typename?: 'AuthorType' }
+        & Pick<AuthorType, 'firstName' | 'lastName'>
+      )> }
+    )> }
+  )> }
+);
+
+export type UserCreateMutationVariables = {
   email: Scalars['String'],
   username: Scalars['String'],
-  places: Array<Place>,
-};
-
-export type UserResponse = {
-   __typename?: 'UserResponse',
-  user?: Maybe<User>,
-  token?: Maybe<Scalars['String']>,
-  errors?: Maybe<Array<FieldError>>,
-};
-
-export type CreatePlaceMutationVariables = {
-  title: Scalars['String'],
-  description: Scalars['String'],
-  imageUrl: Scalars['String']
+  password: Scalars['String']
 };
 
 
-export type CreatePlaceMutation = (
+export type UserCreateMutation = (
   { __typename?: 'Mutation' }
-  & { createPlace: (
-    { __typename?: 'Place' }
-    & Pick<Place, 'id' | 'title' | 'description' | 'imageUrl' | 'creationDate'>
-  ) }
+  & { userCreate: Maybe<(
+    { __typename?: 'UserCreate' }
+    & { user: Maybe<(
+      { __typename?: 'UserType' }
+      & Pick<UserType, 'id' | 'username' | 'email' | 'isStaff' | 'isSuperuser'>
+    )> }
+  )> }
 );
 
 export type CurrentUserQueryVariables = {};
@@ -128,173 +334,264 @@ export type CurrentUserQueryVariables = {};
 
 export type CurrentUserQuery = (
   { __typename?: 'Query' }
-  & { currentUser: (
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'username' | 'email'>
-    & { places: Array<(
-      { __typename?: 'Place' }
-      & Pick<Place, 'id' | 'title' | 'description' | 'imageUrl'>
-    )> }
-  ) }
-);
-
-export type DeletePlaceMutationVariables = {
-  id: Scalars['Float']
-};
-
-
-export type DeletePlaceMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'deletePlace'>
-);
-
-export type SignInMutationVariables = {
-  username?: Maybe<Scalars['String']>,
-  email?: Maybe<Scalars['String']>,
-  password: Scalars['String']
-};
-
-
-export type SignInMutation = (
-  { __typename?: 'Mutation' }
-  & { login: (
-    { __typename?: 'UserResponse' }
-    & Pick<UserResponse, 'token'>
-    & { user: Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'username' | 'email'>
-    )> }
-  ) }
-);
-
-export type NewPlaceAddedSubscriptionVariables = {};
-
-
-export type NewPlaceAddedSubscription = (
-  { __typename?: 'Subscription' }
-  & { newPlaceAdded: (
-    { __typename?: 'Place' }
-    & Pick<Place, 'id' | 'title' | 'description' | 'imageUrl' | 'creationDate'>
-    & { user: Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'username'>
-    )> }
-  ) }
-);
-
-export type PlaceQueryVariables = {
-  id: Scalars['Float']
-};
-
-
-export type PlaceQuery = (
-  { __typename?: 'Query' }
-  & { place: Maybe<(
-    { __typename?: 'Place' }
-    & Pick<Place, 'id' | 'title' | 'description' | 'imageUrl' | 'creationDate'>
-  )> }
-);
-
-export type PlacesQueryVariables = {};
-
-
-export type PlacesQuery = (
-  { __typename?: 'Query' }
-  & { places: Array<(
-    { __typename?: 'Place' }
-    & Pick<Place, 'id' | 'title' | 'description' | 'imageUrl' | 'creationDate'>
-    & { user: Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'username'>
+  & { currentUser: Maybe<(
+    { __typename?: 'UserType' }
+    & Pick<UserType, 'id' | 'username' | 'email' | 'isStaff' | 'isSuperuser' | 'firstName' | 'lastName'>
+    & { reviewSet: Array<(
+      { __typename?: 'ReviewType' }
+      & Pick<ReviewType, 'value' | 'comment' | 'pubDate'>
+      & { book: (
+        { __typename?: 'BookType' }
+        & Pick<BookType, 'title'>
+        & { author: Maybe<(
+          { __typename?: 'AuthorType' }
+          & Pick<AuthorType, 'firstName' | 'lastName'>
+        )> }
+      ) }
     )> }
   )> }
 );
 
-export type SignUpMutationVariables = {
+export type DeleteBookMutationVariables = {
+  id: Scalars['ID']
+};
+
+
+export type DeleteBookMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteBook: Maybe<(
+    { __typename?: 'BookDelete' }
+    & Pick<BookDelete, 'ok'>
+  )> }
+);
+
+export type LoginMutationVariables = {
   username: Scalars['String'],
-  email: Scalars['String'],
   password: Scalars['String']
 };
 
 
-export type SignUpMutation = (
+export type LoginMutation = (
   { __typename?: 'Mutation' }
-  & { register: (
-    { __typename?: 'UserResponse' }
-    & Pick<UserResponse, 'token'>
-    & { user: Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'username' | 'email'>
-    )> }
-  ) }
-);
-
-export type UpdatePlaceMutationVariables = {
-  id?: Maybe<Scalars['Float']>,
-  title: Scalars['String'],
-  description?: Maybe<Scalars['String']>,
-  imageUrl?: Maybe<Scalars['String']>
-};
-
-
-export type UpdatePlaceMutation = (
-  { __typename?: 'Mutation' }
-  & { updatePlace: (
-    { __typename?: 'Place' }
-    & Pick<Place, 'id' | 'title' | 'description' | 'imageUrl' | 'creationDate'>
-  ) }
+  & { tokenAuth: Maybe<(
+    { __typename?: 'ObtainJSONWebToken' }
+    & Pick<ObtainJsonWebToken, 'token' | 'refreshExpiresIn' | 'payload'>
+  )> }
 );
 
 
-export const CreatePlaceDocument = gql`
-    mutation CreatePlace($title: String!, $description: String!, $imageUrl: String!) {
-  createPlace(place: {title: $title, description: $description, imageUrl: $imageUrl}) {
+export const BookDocument = gql`
+    query Book($id: ID!) {
+  book(id: $id) {
     id
     title
-    description
-    imageUrl
-    creationDate
+    author {
+      firstName
+      lastName
+    }
+    summary
+    isbn
+    genre {
+      name
+    }
+    language {
+      name
+    }
+    image
+    reviewSet {
+      user {
+        username
+      }
+      comment
+      pubDate
+    }
   }
 }
     `;
-export type CreatePlaceMutationFn = ApolloReactCommon.MutationFunction<CreatePlaceMutation, CreatePlaceMutationVariables>;
 
 /**
- * __useCreatePlaceMutation__
+ * __useBookQuery__
  *
- * To run a mutation, you first call `useCreatePlaceMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreatePlaceMutation` returns a tuple that includes:
+ * To run a query within a React component, call `useBookQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBookQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBookQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useBookQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<BookQuery, BookQueryVariables>) {
+        return ApolloReactHooks.useQuery<BookQuery, BookQueryVariables>(BookDocument, baseOptions);
+      }
+export function useBookLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<BookQuery, BookQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<BookQuery, BookQueryVariables>(BookDocument, baseOptions);
+        }
+export type BookQueryHookResult = ReturnType<typeof useBookQuery>;
+export type BookLazyQueryHookResult = ReturnType<typeof useBookLazyQuery>;
+export type BookQueryResult = ApolloReactCommon.QueryResult<BookQuery, BookQueryVariables>;
+export const BooksDocument = gql`
+    query Books {
+  books {
+    id
+    title
+    author {
+      firstName
+      lastName
+    }
+    summary
+    isbn
+    genre {
+      name
+    }
+    language {
+      name
+    }
+    image
+    reviewSet {
+      user {
+        username
+      }
+      comment
+      pubDate
+    }
+  }
+}
+    `;
+
+/**
+ * __useBooksQuery__
+ *
+ * To run a query within a React component, call `useBooksQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBooksQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBooksQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useBooksQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<BooksQuery, BooksQueryVariables>) {
+        return ApolloReactHooks.useQuery<BooksQuery, BooksQueryVariables>(BooksDocument, baseOptions);
+      }
+export function useBooksLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<BooksQuery, BooksQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<BooksQuery, BooksQueryVariables>(BooksDocument, baseOptions);
+        }
+export type BooksQueryHookResult = ReturnType<typeof useBooksQuery>;
+export type BooksLazyQueryHookResult = ReturnType<typeof useBooksLazyQuery>;
+export type BooksQueryResult = ApolloReactCommon.QueryResult<BooksQuery, BooksQueryVariables>;
+export const CreateBookDocument = gql`
+    mutation CreateBook($title: String!, $summary: String!, $isbn: String!, $language: ID!, $author: ID!, $image: String!) {
+  createBook(input: {title: $title, summary: $summary, isbn: $isbn, image: $image, language: $language, author: $author}) {
+    book {
+      title
+      author {
+        firstName
+        lastName
+      }
+      image
+    }
+  }
+}
+    `;
+export type CreateBookMutationFn = ApolloReactCommon.MutationFunction<CreateBookMutation, CreateBookMutationVariables>;
+
+/**
+ * __useCreateBookMutation__
+ *
+ * To run a mutation, you first call `useCreateBookMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateBookMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createPlaceMutation, { data, loading, error }] = useCreatePlaceMutation({
+ * const [createBookMutation, { data, loading, error }] = useCreateBookMutation({
  *   variables: {
  *      title: // value for 'title'
- *      description: // value for 'description'
- *      imageUrl: // value for 'imageUrl'
+ *      summary: // value for 'summary'
+ *      isbn: // value for 'isbn'
+ *      language: // value for 'language'
+ *      author: // value for 'author'
+ *      image: // value for 'image'
  *   },
  * });
  */
-export function useCreatePlaceMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreatePlaceMutation, CreatePlaceMutationVariables>) {
-        return ApolloReactHooks.useMutation<CreatePlaceMutation, CreatePlaceMutationVariables>(CreatePlaceDocument, baseOptions);
+export function useCreateBookMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateBookMutation, CreateBookMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateBookMutation, CreateBookMutationVariables>(CreateBookDocument, baseOptions);
       }
-export type CreatePlaceMutationHookResult = ReturnType<typeof useCreatePlaceMutation>;
-export type CreatePlaceMutationResult = ApolloReactCommon.MutationResult<CreatePlaceMutation>;
-export type CreatePlaceMutationOptions = ApolloReactCommon.BaseMutationOptions<CreatePlaceMutation, CreatePlaceMutationVariables>;
+export type CreateBookMutationHookResult = ReturnType<typeof useCreateBookMutation>;
+export type CreateBookMutationResult = ApolloReactCommon.MutationResult<CreateBookMutation>;
+export type CreateBookMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateBookMutation, CreateBookMutationVariables>;
+export const UserCreateDocument = gql`
+    mutation UserCreate($email: String!, $username: String!, $password: String!) {
+  userCreate(email: $email, username: $username, password: $password) {
+    user {
+      id
+      username
+      email
+      isStaff
+      isSuperuser
+    }
+  }
+}
+    `;
+export type UserCreateMutationFn = ApolloReactCommon.MutationFunction<UserCreateMutation, UserCreateMutationVariables>;
+
+/**
+ * __useUserCreateMutation__
+ *
+ * To run a mutation, you first call `useUserCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUserCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [userCreateMutation, { data, loading, error }] = useUserCreateMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      username: // value for 'username'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useUserCreateMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UserCreateMutation, UserCreateMutationVariables>) {
+        return ApolloReactHooks.useMutation<UserCreateMutation, UserCreateMutationVariables>(UserCreateDocument, baseOptions);
+      }
+export type UserCreateMutationHookResult = ReturnType<typeof useUserCreateMutation>;
+export type UserCreateMutationResult = ApolloReactCommon.MutationResult<UserCreateMutation>;
+export type UserCreateMutationOptions = ApolloReactCommon.BaseMutationOptions<UserCreateMutation, UserCreateMutationVariables>;
 export const CurrentUserDocument = gql`
     query CurrentUser {
   currentUser {
     id
     username
     email
-    places {
-      id
-      title
-      description
-      imageUrl
+    isStaff
+    isSuperuser
+    firstName
+    lastName
+    reviewSet {
+      value
+      comment
+      pubDate
+      book {
+        title
+        author {
+          firstName
+          lastName
+        }
+      }
     }
   }
 }
@@ -324,263 +621,70 @@ export function useCurrentUserLazyQuery(baseOptions?: ApolloReactHooks.LazyQuery
 export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
 export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
 export type CurrentUserQueryResult = ApolloReactCommon.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
-export const DeletePlaceDocument = gql`
-    mutation DeletePlace($id: Float!) {
-  deletePlace(id: $id)
+export const DeleteBookDocument = gql`
+    mutation DeleteBook($id: ID!) {
+  deleteBook(id: $id) {
+    ok
+  }
 }
     `;
-export type DeletePlaceMutationFn = ApolloReactCommon.MutationFunction<DeletePlaceMutation, DeletePlaceMutationVariables>;
+export type DeleteBookMutationFn = ApolloReactCommon.MutationFunction<DeleteBookMutation, DeleteBookMutationVariables>;
 
 /**
- * __useDeletePlaceMutation__
+ * __useDeleteBookMutation__
  *
- * To run a mutation, you first call `useDeletePlaceMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeletePlaceMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useDeleteBookMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteBookMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deletePlaceMutation, { data, loading, error }] = useDeletePlaceMutation({
+ * const [deleteBookMutation, { data, loading, error }] = useDeleteBookMutation({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useDeletePlaceMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeletePlaceMutation, DeletePlaceMutationVariables>) {
-        return ApolloReactHooks.useMutation<DeletePlaceMutation, DeletePlaceMutationVariables>(DeletePlaceDocument, baseOptions);
+export function useDeleteBookMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteBookMutation, DeleteBookMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeleteBookMutation, DeleteBookMutationVariables>(DeleteBookDocument, baseOptions);
       }
-export type DeletePlaceMutationHookResult = ReturnType<typeof useDeletePlaceMutation>;
-export type DeletePlaceMutationResult = ApolloReactCommon.MutationResult<DeletePlaceMutation>;
-export type DeletePlaceMutationOptions = ApolloReactCommon.BaseMutationOptions<DeletePlaceMutation, DeletePlaceMutationVariables>;
-export const SignInDocument = gql`
-    mutation SignIn($username: String, $email: String, $password: String!) {
-  login(input: {username: $username, email: $email, password: $password}) {
+export type DeleteBookMutationHookResult = ReturnType<typeof useDeleteBookMutation>;
+export type DeleteBookMutationResult = ApolloReactCommon.MutationResult<DeleteBookMutation>;
+export type DeleteBookMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteBookMutation, DeleteBookMutationVariables>;
+export const LoginDocument = gql`
+    mutation Login($username: String!, $password: String!) {
+  tokenAuth(username: $username, password: $password) {
     token
-    user {
-      id
-      username
-      email
-    }
+    refreshExpiresIn
+    payload
   }
 }
     `;
-export type SignInMutationFn = ApolloReactCommon.MutationFunction<SignInMutation, SignInMutationVariables>;
+export type LoginMutationFn = ApolloReactCommon.MutationFunction<LoginMutation, LoginMutationVariables>;
 
 /**
- * __useSignInMutation__
+ * __useLoginMutation__
  *
- * To run a mutation, you first call `useSignInMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSignInMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [signInMutation, { data, loading, error }] = useSignInMutation({
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
  *   variables: {
  *      username: // value for 'username'
- *      email: // value for 'email'
  *      password: // value for 'password'
  *   },
  * });
  */
-export function useSignInMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SignInMutation, SignInMutationVariables>) {
-        return ApolloReactHooks.useMutation<SignInMutation, SignInMutationVariables>(SignInDocument, baseOptions);
+export function useLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        return ApolloReactHooks.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
       }
-export type SignInMutationHookResult = ReturnType<typeof useSignInMutation>;
-export type SignInMutationResult = ApolloReactCommon.MutationResult<SignInMutation>;
-export type SignInMutationOptions = ApolloReactCommon.BaseMutationOptions<SignInMutation, SignInMutationVariables>;
-export const NewPlaceAddedDocument = gql`
-    subscription NewPlaceAdded {
-  newPlaceAdded {
-    id
-    title
-    description
-    imageUrl
-    creationDate
-    user {
-      id
-      username
-    }
-  }
-}
-    `;
-
-/**
- * __useNewPlaceAddedSubscription__
- *
- * To run a query within a React component, call `useNewPlaceAddedSubscription` and pass it any options that fit your needs.
- * When your component renders, `useNewPlaceAddedSubscription` returns an object from Apollo Client that contains loading, error, and data properties 
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useNewPlaceAddedSubscription({
- *   variables: {
- *   },
- * });
- */
-export function useNewPlaceAddedSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<NewPlaceAddedSubscription, NewPlaceAddedSubscriptionVariables>) {
-        return ApolloReactHooks.useSubscription<NewPlaceAddedSubscription, NewPlaceAddedSubscriptionVariables>(NewPlaceAddedDocument, baseOptions);
-      }
-export type NewPlaceAddedSubscriptionHookResult = ReturnType<typeof useNewPlaceAddedSubscription>;
-export type NewPlaceAddedSubscriptionResult = ApolloReactCommon.SubscriptionResult<NewPlaceAddedSubscription>;
-export const PlaceDocument = gql`
-    query Place($id: Float!) {
-  place(id: $id) {
-    id
-    title
-    description
-    imageUrl
-    creationDate
-  }
-}
-    `;
-
-/**
- * __usePlaceQuery__
- *
- * To run a query within a React component, call `usePlaceQuery` and pass it any options that fit your needs.
- * When your component renders, `usePlaceQuery` returns an object from Apollo Client that contains loading, error, and data properties 
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = usePlaceQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function usePlaceQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<PlaceQuery, PlaceQueryVariables>) {
-        return ApolloReactHooks.useQuery<PlaceQuery, PlaceQueryVariables>(PlaceDocument, baseOptions);
-      }
-export function usePlaceLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<PlaceQuery, PlaceQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<PlaceQuery, PlaceQueryVariables>(PlaceDocument, baseOptions);
-        }
-export type PlaceQueryHookResult = ReturnType<typeof usePlaceQuery>;
-export type PlaceLazyQueryHookResult = ReturnType<typeof usePlaceLazyQuery>;
-export type PlaceQueryResult = ApolloReactCommon.QueryResult<PlaceQuery, PlaceQueryVariables>;
-export const PlacesDocument = gql`
-    query Places {
-  places {
-    id
-    title
-    description
-    imageUrl
-    creationDate
-    user {
-      id
-      username
-    }
-  }
-}
-    `;
-
-/**
- * __usePlacesQuery__
- *
- * To run a query within a React component, call `usePlacesQuery` and pass it any options that fit your needs.
- * When your component renders, `usePlacesQuery` returns an object from Apollo Client that contains loading, error, and data properties 
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = usePlacesQuery({
- *   variables: {
- *   },
- * });
- */
-export function usePlacesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<PlacesQuery, PlacesQueryVariables>) {
-        return ApolloReactHooks.useQuery<PlacesQuery, PlacesQueryVariables>(PlacesDocument, baseOptions);
-      }
-export function usePlacesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<PlacesQuery, PlacesQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<PlacesQuery, PlacesQueryVariables>(PlacesDocument, baseOptions);
-        }
-export type PlacesQueryHookResult = ReturnType<typeof usePlacesQuery>;
-export type PlacesLazyQueryHookResult = ReturnType<typeof usePlacesLazyQuery>;
-export type PlacesQueryResult = ApolloReactCommon.QueryResult<PlacesQuery, PlacesQueryVariables>;
-export const SignUpDocument = gql`
-    mutation SignUp($username: String!, $email: String!, $password: String!) {
-  register(input: {username: $username, email: $email, password: $password}) {
-    token
-    user {
-      id
-      username
-      email
-    }
-  }
-}
-    `;
-export type SignUpMutationFn = ApolloReactCommon.MutationFunction<SignUpMutation, SignUpMutationVariables>;
-
-/**
- * __useSignUpMutation__
- *
- * To run a mutation, you first call `useSignUpMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSignUpMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [signUpMutation, { data, loading, error }] = useSignUpMutation({
- *   variables: {
- *      username: // value for 'username'
- *      email: // value for 'email'
- *      password: // value for 'password'
- *   },
- * });
- */
-export function useSignUpMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SignUpMutation, SignUpMutationVariables>) {
-        return ApolloReactHooks.useMutation<SignUpMutation, SignUpMutationVariables>(SignUpDocument, baseOptions);
-      }
-export type SignUpMutationHookResult = ReturnType<typeof useSignUpMutation>;
-export type SignUpMutationResult = ApolloReactCommon.MutationResult<SignUpMutation>;
-export type SignUpMutationOptions = ApolloReactCommon.BaseMutationOptions<SignUpMutation, SignUpMutationVariables>;
-export const UpdatePlaceDocument = gql`
-    mutation UpdatePlace($id: Float, $title: String!, $description: String, $imageUrl: String) {
-  updatePlace(place: {id: $id, title: $title, description: $description, imageUrl: $imageUrl}) {
-    id
-    title
-    description
-    imageUrl
-    creationDate
-  }
-}
-    `;
-export type UpdatePlaceMutationFn = ApolloReactCommon.MutationFunction<UpdatePlaceMutation, UpdatePlaceMutationVariables>;
-
-/**
- * __useUpdatePlaceMutation__
- *
- * To run a mutation, you first call `useUpdatePlaceMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdatePlaceMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updatePlaceMutation, { data, loading, error }] = useUpdatePlaceMutation({
- *   variables: {
- *      id: // value for 'id'
- *      title: // value for 'title'
- *      description: // value for 'description'
- *      imageUrl: // value for 'imageUrl'
- *   },
- * });
- */
-export function useUpdatePlaceMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdatePlaceMutation, UpdatePlaceMutationVariables>) {
-        return ApolloReactHooks.useMutation<UpdatePlaceMutation, UpdatePlaceMutationVariables>(UpdatePlaceDocument, baseOptions);
-      }
-export type UpdatePlaceMutationHookResult = ReturnType<typeof useUpdatePlaceMutation>;
-export type UpdatePlaceMutationResult = ApolloReactCommon.MutationResult<UpdatePlaceMutation>;
-export type UpdatePlaceMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdatePlaceMutation, UpdatePlaceMutationVariables>;
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = ApolloReactCommon.MutationResult<LoginMutation>;
+export type LoginMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginMutation, LoginMutationVariables>;

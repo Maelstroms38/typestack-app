@@ -1,18 +1,18 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { Places } from '../screens';
+import { Books } from '../screens';
 import { useTheme, Portal, FAB } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
-import { PlaceDetail, AuthLoading, Login, Profile, Form } from '../screens';
+import { BookDetail, AuthLoading, Login, Profile, Form } from '../screens';
 import { Header } from './Header';
 
 const Stack = createStackNavigator();
 
-export const PlaceStack = () => {
+export const Bookstack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="Places"
+      initialRouteName="Books"
       headerMode="screen"
       screenOptions={{
         header: ({ scene, previous, navigation }) => (
@@ -20,8 +20,8 @@ export const PlaceStack = () => {
         )
       }}
     >
-      <Stack.Screen name="Places" component={Places} />
-      <Stack.Screen name="Detail" component={PlaceDetail} />
+      <Stack.Screen name="Books" component={Books} />
+      <Stack.Screen name="Detail" component={BookDetail} />
       <Stack.Screen name="Form" component={Form} />
     </Stack.Navigator>
   );
@@ -53,13 +53,13 @@ export const MainTabNavigator = ({ navigation }) => {
   return (
     <React.Fragment>
       <Tab.Navigator
-        initialRouteName="Places"
+        initialRouteName="Books"
         shifting={true}
         sceneAnimationEnabled={false}
       >
         <Tab.Screen
-          name="Places"
-          component={PlaceStack}
+          name="Books"
+          component={Bookstack}
           options={{
             tabBarIcon: 'home-account'
           }}
