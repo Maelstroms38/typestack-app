@@ -11,8 +11,7 @@ import {
   Profile,
   Form,
   Schedule,
-  ScanScreen,
-  ScanConfirm
+  ScanScreen
 } from '../screens';
 import { Header } from './Header';
 
@@ -57,13 +56,6 @@ export const ScanStack = () => {
       <Stack.Screen
         name="ScanScreen"
         component={ScanScreen}
-        options={{
-          headerTitle: 'Scan'
-        }}
-      />
-      <Stack.Screen
-        name="ScanConfirm"
-        component={ScanConfirm}
         options={{
           headerTitle: 'Scan'
         }}
