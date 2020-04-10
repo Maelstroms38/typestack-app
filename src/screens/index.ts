@@ -6,7 +6,6 @@ import Profile from './ProfileScreen';
 import Form from './BookForm';
 import Schedule from './Schedule';
 import ScanScreen from './ScanScreen';
-import ScanConfirm from './ScanConfirm';
 
 export {
   Books,
@@ -16,6 +15,5 @@ export {
   Profile,
   Form,
   Schedule,
-  ScanScreen,
-  ScanConfirm
+  ScanScreen
 };
