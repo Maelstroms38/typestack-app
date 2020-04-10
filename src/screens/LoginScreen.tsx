@@ -6,7 +6,7 @@ import {
   AsyncStorage,
   ScrollView
 } from 'react-native';
-import { useSignUpMutation, useSignInMutation } from '../../graphql';
+// import { useSignUpMutation, useSignInMutation } from '../../graphql';
 import { Button, TextInput, useTheme } from 'react-native-paper';
 
 const { width } = Dimensions.get('window');
@@ -20,34 +20,34 @@ export default function LoginScreen(props) {
   const [login, setLogin] = useState(false);
 
   // Signing Up
-  const [signUpMutation] = useSignUpMutation({
-    async onCompleted({ register }) {
-      const { token } = register;
-      if (token) {
-        try {
-          await AsyncStorage.setItem('token', token);
-          navigation.replace('Profile');
-        } catch (err) {
-          console.log(err.message);
-        }
-      }
-    }
-  });
+  // const [signUpMutation] = useSignUpMutation({
+  //   async onCompleted({ register }) {
+  //     const { token } = register;
+  //     if (token) {
+  //       try {
+  //         await AsyncStorage.setItem('token', token);
+  //         navigation.replace('Profile');
+  //       } catch (err) {
+  //         console.log(err.message);
+  //       }
+  //     }
+  //   }
+  // });
 
   // Signing In
-  const [signInMutation] = useSignInMutation({
-    async onCompleted({ login }) {
-      const { token } = login;
-      if (token) {
-        try {
-          await AsyncStorage.setItem('token', token);
-          navigation.replace('Profile');
-        } catch (err) {
-          console.log(err.message);
-        }
-      }
-    }
-  });
+  // const [signInMutation] = useSignInMutation({
+  //   async onCompleted({ login }) {
+  //     const { token } = login;
+  //     if (token) {
+  //       try {
+  //         await AsyncStorage.setItem('token', token);
+  //         navigation.replace('Profile');
+  //       } catch (err) {
+  //         console.log(err.message);
+  //       }
+  //     }
+  //   }
+  // });
 
   return (
     <ScrollView
@@ -100,15 +100,15 @@ export default function LoginScreen(props) {
             if (login) {
               // email validation
               const isEmail = email.includes('@');
-              isEmail
-                ? signInMutation({
-                    variables: { email, password }
-                  })
-                : signInMutation({
-                    variables: { username: email, password }
-                  });
+              // isEmail
+              //   ? signInMutation({
+              //       variables: { email, password }
+              //     })
+              //   : signInMutation({
+              //       variables: { username: email, password }
+              //     });
             } else {
-              signUpMutation({ variables: { email, username, password } });
+              //signUpMutation({ variables: { email, username, password } });
             }
           }}
         >
@@ -127,10 +127,6 @@ export default function LoginScreen(props) {
     </ScrollView>
   );
 }
-
-LoginScreen.navigationOptions = {
-  title: 'Welcome'
-};
 
 const styles = StyleSheet.create({
   container: {

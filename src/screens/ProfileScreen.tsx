@@ -36,11 +36,11 @@ const Profile: React.FC<Props> = props => {
       </Card>
       <FlatList
         data={
-          data && data.currentUser && data.currentUser.places
-            ? data.currentUser.places
+          data && data.currentUser && data.currentUser.reviewSet
+            ? data.currentUser.reviewSet
             : []
         }
-        keyExtractor={item => `${item.id}`}
+        keyExtractor={item => `${item.pubDate}`}
         renderItem={({ item }) => {
           return (
             <CardView

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { SafeAreaView, FlatList, Button } from 'react-native';
-// import { useBooksQuery, NewPlaceAddedDocument } from '../../graphql';
+import { useBooksQuery } from '../../graphql';
 import { CardView } from '../components';
 
 interface Props {
@@ -8,27 +8,13 @@ interface Props {
 }
 
 const Books: React.FC<Props> = props => {
-  // const { data, subscribeToMore } = useBooksQuery();
+  const { data } = useBooksQuery();
   const { navigation } = props;
-
-  useEffect(() => {
-    // subscribeToMore({
-    //   document: NewPlaceAddedDocument,
-    //   updateQuery: (prev, { subscriptionData }) => {
-    //     if (!subscriptionData.data) return prev;
-    //     const newPlace = (subscriptionData.data as any).newPlaceAdded;
-    //     // add new place
-    //     return Object.assign({}, prev, {
-    //       Books: [newPlace, ...prev.Books]
-    //     });
-    //   }
-    // });
-  }, []);
 
   return (
     <SafeAreaView>
-      {/*<FlatList
-        data={data && data.Books ? data.Books : []}
+      <FlatList
+        data={data && data.books ? data.books : []}
         keyExtractor={item => `${item.id}`}
         renderItem={({ item }) => (
           <CardView
@@ -36,7 +22,7 @@ const Books: React.FC<Props> = props => {
             onPress={() => navigation.navigate('Detail', { item })}
           />
         )}
-        />*/}
+      />
     </SafeAreaView>
   );
 };

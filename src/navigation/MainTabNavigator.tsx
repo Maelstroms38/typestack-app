@@ -4,7 +4,16 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import { Books } from '../screens';
 import { useTheme, Portal, FAB } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
-import { BookDetail, AuthLoading, Login, Profile, Form } from '../screens';
+import {
+  BookDetail,
+  AuthLoading,
+  Login,
+  Profile,
+  Form,
+  Schedule,
+  ScanScreen,
+  ScanConfirm
+} from '../screens';
 import { Header } from './Header';
 
 const Stack = createStackNavigator();
@@ -22,7 +31,50 @@ export const Bookstack = () => {
     >
       <Stack.Screen name="Books" component={Books} />
       <Stack.Screen name="Detail" component={BookDetail} />
-      <Stack.Screen name="Form" component={Form} />
+      <Stack.Screen
+        name="Form"
+        component={Form}
+        options={{
+          headerTitle: 'Create Book'
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+export const ScanStack = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName="Schedule"
+      headerMode="screen"
+      screenOptions={{
+        header: ({ scene, previous, navigation }) => (
+          <Header scene={scene} previous={previous} navigation={navigation} />
+        )
+      }}
+    >
+      <Stack.Screen name="Schedule" component={Schedule} />
+      <Stack.Screen
+        name="ScanScreen"
+        component={ScanScreen}
+        options={{
+          headerTitle: 'Scan'
+        }}
+      />
+      <Stack.Screen
+        name="ScanConfirm"
+        component={ScanConfirm}
+        options={{
+          headerTitle: 'Scan'
+        }}
+      />
+      <Stack.Screen
+        name="ScanForm"
+        component={Form}
+        options={{
+          headerTitle: 'Create Book'
+        }}
+      />
     </Stack.Navigator>
   );
 };
@@ -61,7 +113,14 @@ export const MainTabNavigator = ({ navigation }) => {
           name="Books"
           component={Bookstack}
           options={{
-            tabBarIcon: 'home-account'
+            tabBarIcon: 'library-books'
+          }}
+        />
+        <Tab.Screen
+          name="Scan"
+          component={ScanStack}
+          options={{
+            tabBarIcon: 'barcode-scan'
           }}
         />
         <Tab.Screen
@@ -72,7 +131,7 @@ export const MainTabNavigator = ({ navigation }) => {
           }}
         />
       </Tab.Navigator>
-      <Portal>
+      {/*<Portal>
         <FAB
           visible={isFocused}
           icon="feather"
@@ -84,7 +143,7 @@ export const MainTabNavigator = ({ navigation }) => {
             right: 16
           }}
         />
-      </Portal>
+        </Portal>*/}
     </React.Fragment>
   );
 };

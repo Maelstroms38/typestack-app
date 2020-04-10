@@ -8,7 +8,7 @@ interface Props {
   navigation;
 }
 
-const PlaceDetail: React.FC<Props> = props => {
+const BookDetail: React.FC<Props> = props => {
   const route = useRoute();
   const { item } = route.params as any;
   const { navigation } = props;
@@ -24,10 +24,10 @@ const PlaceDetail: React.FC<Props> = props => {
           navigation.navigate('Form', { item });
         }}
       >
-        Edit Place
+        Edit Book
       </Button>
     </SafeAreaView>
   );
 };
 
-export default PlaceDetail;
+export default BookDetail;

@@ -1,36 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import { useTheme, Button, Card, Dialog, Paragraph } from 'react-native-paper';
+import fetchBook from '../../api';
 
 interface Scan {
   type: string;
   data: string;
 }
 
-export default function Scan() {
-  const [hasPermission, setHasPermission] = useState(false);
-  const [scanned, setScanned] = useState(false);
+export default function ScanScreen(props) {
+  const { navigation } = props;
+  const theme = useTheme();
+  const [visible, setVisible] = useState(false);
+  const [scanned, setScanned] = useState('');
+  const [book, setBook] = useState(null);
 
-  useEffect(() => {
-    (async () => {
-      const { granted } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(granted);
-    })();
-  }, []);
-
-  const handleBarCodeScanned = (scan: Scan) => {
-    setScanned(true);
-    alert(
-      `Bar code with type ${scan.type} and data ${scan.data} has been scanned!`
-    );
+  const _showDialog = () => setVisible(true);
+  const _hideDialog = () => {
+    setVisible(false);
+    setScanned('');
   };
 
-  if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
+  const handleBarCodeScanned = async (scan: Scan) => {
+    setScanned(scan.data);
+    const book = await fetchBook(scan.data);
+    if (book) {
+      setBook(book);
+      _showDialog();
+    }
+  };
 
   return (
     <View
@@ -44,10 +43,36 @@ export default function Scan() {
         onBarCodeScanned={scanned ? (undefined as any) : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
       />
-
-      {scanned && (
-        <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />
-      )}
+      <Dialog
+        style={{ backgroundColor: theme.colors.background }}
+        visible={visible}
+        onDismiss={_hideDialog}
+      >
+        <Dialog.Title style={{ fontWeight: 'bold', textAlign: 'center' }}>
+          {book && book.volumeInfo && book.volumeInfo.title}
+        </Dialog.Title>
+        <Dialog.Content>
+          <Card.Cover
+            source={{
+              uri: `https://pictures.abebooks.com/isbn/${scanned}-us-300.jpg`
+            }}
+          />
+        </Dialog.Content>
+        <Dialog.Actions style={{ justifyContent: 'space-between' }}>
+          <Button mode="text" style={{ flex: 1 }} onPress={_hideDialog}>
+            CANCEL
+          </Button>
+          <Button
+            mode="outlined"
+            style={{ flex: 2 }}
+            onPress={() => {
+              navigation.navigate('ScanForm', { item: book });
+            }}
+          >
+            ADD BOOK
+          </Button>
+        </Dialog.Actions>
+      </Dialog>
     </View>
   );
 }

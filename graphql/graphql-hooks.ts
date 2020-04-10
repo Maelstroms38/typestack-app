@@ -21,6 +21,7 @@ export type AuthorType = {
   lastName: Scalars['String'],
   dateOfBirth?: Maybe<Scalars['Date']>,
   dateOfDeath?: Maybe<Scalars['Date']>,
+  slug: Scalars['String'],
   bookSet: Array<BookType>,
 };
 
@@ -39,8 +40,9 @@ export type BookInputType = {
   summary?: Maybe<Scalars['String']>,
   isbn?: Maybe<Scalars['String']>,
   image?: Maybe<Scalars['String']>,
-  language?: Maybe<Scalars['ID']>,
-  author?: Maybe<Scalars['ID']>,
+  language?: Maybe<Scalars['String']>,
+  author?: Maybe<Scalars['String']>,
+  genres?: Maybe<Array<Maybe<Scalars['String']>>>,
 };
 
 export type BookType = {
@@ -48,6 +50,7 @@ export type BookType = {
   id: Scalars['ID'],
   title: Scalars['String'],
   author?: Maybe<AuthorType>,
+  slug: Scalars['String'],
   summary: Scalars['String'],
   isbn: Scalars['String'],
   genre: Array<GenreType>,
@@ -63,6 +66,7 @@ export type GenreType = {
    __typename?: 'GenreType',
   id: Scalars['ID'],
   name: Scalars['String'],
+  slug: Scalars['String'],
   bookSet: Array<BookType>,
 };
 
@@ -70,6 +74,7 @@ export type LanguageType = {
    __typename?: 'LanguageType',
   id: Scalars['ID'],
   name: Scalars['String'],
+  slug: Scalars['String'],
   bookSet: Array<BookType>,
 };
 
@@ -290,9 +295,10 @@ export type CreateBookMutationVariables = {
   title: Scalars['String'],
   summary: Scalars['String'],
   isbn: Scalars['String'],
-  language: Scalars['ID'],
-  author: Scalars['ID'],
-  image: Scalars['String']
+  language: Scalars['String'],
+  author: Scalars['String'],
+  image: Scalars['String'],
+  genres?: Maybe<Array<Maybe<Scalars['String']>>>
 };
 
 
@@ -488,8 +494,8 @@ export type BooksQueryHookResult = ReturnType<typeof useBooksQuery>;
 export type BooksLazyQueryHookResult = ReturnType<typeof useBooksLazyQuery>;
 export type BooksQueryResult = ApolloReactCommon.QueryResult<BooksQuery, BooksQueryVariables>;
 export const CreateBookDocument = gql`
-    mutation CreateBook($title: String!, $summary: String!, $isbn: String!, $language: ID!, $author: ID!, $image: String!) {
-  createBook(input: {title: $title, summary: $summary, isbn: $isbn, image: $image, language: $language, author: $author}) {
+    mutation CreateBook($title: String!, $summary: String!, $isbn: String!, $language: String!, $author: String!, $image: String!, $genres: [String]) {
+  createBook(input: {title: $title, summary: $summary, isbn: $isbn, image: $image, language: $language, author: $author, genres: $genres}) {
     book {
       title
       author {
@@ -522,6 +528,7 @@ export type CreateBookMutationFn = ApolloReactCommon.MutationFunction<CreateBook
  *      language: // value for 'language'
  *      author: // value for 'author'
  *      image: // value for 'image'
+ *      genres: // value for 'genres'
  *   },
  * });
  */

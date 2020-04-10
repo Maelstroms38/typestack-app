@@ -2,9 +2,10 @@ mutation CreateBook(
   $title: String!
   $summary: String!
   $isbn: String!
-  $language: ID!
-  $author: ID!
+  $language: String!
+  $author: String!
   $image: String!
+  $genres: [String],
 ) {
   createBook(
     input: {
@@ -14,6 +15,7 @@ mutation CreateBook(
       image: $image
       language: $language
       author: $author
+      genres:$genres
     }
   ) {
     book {
