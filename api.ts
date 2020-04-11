@@ -1,7 +1,7 @@
 import axios from 'axios';
 export default async function fetchBook(isbn: String) {
   const config = {
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json' }
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
   };
   const { data } = await axios.get(
     `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&?maxResults=1`,
