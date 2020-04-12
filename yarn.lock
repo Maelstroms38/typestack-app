@@ -6413,6 +6413,13 @@ react-native-web@~0.11.7:
     stacktrace-parser "^0.1.3"
     whatwg-fetch "^3.0.0"
 
+react-navigation-collapsible@^5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/react-navigation-collapsible/-/react-navigation-collapsible-5.4.0.tgz#90b2f4a042f129b288daea52645cd4c3244ef662"
+  integrity sha512-otz2SPyOihPkVyGYxtmYWtbHNC9/AHCc+C1qc1TgTf0qtsM8VJvaEwqWfwuT7MCT+MNrlXba5w4qEs9ithe5zw==
+  dependencies:
+    react-native-iphone-x-helper "^1.2.1"
+
 react-navigation-stack@^2.1.0:
   version "2.3.11"
   resolved "https://registry.yarnpkg.com/react-navigation-stack/-/react-navigation-stack-2.3.11.tgz#3260c311c7d18303b0ed179f8477697321a162e9"

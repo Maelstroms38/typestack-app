@@ -1,5 +1,5 @@
-query Books {
-  books {
+query Books($search: String, $offset: Int, $limit: Int) {
+  books(search: $search, offset: $offset, limit: $limit) {
     id
     title
     author {

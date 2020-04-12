@@ -2,8 +2,8 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { Books } from '../screens';
-import { useTheme, Portal, FAB } from 'react-native-paper';
-import { useIsFocused } from '@react-navigation/native';
+import { useTheme } from 'react-native-paper';
+import { createCollapsibleStackSub } from 'react-navigation-collapsible';
 import {
   BookDetail,
   AuthLoading,
@@ -11,7 +11,7 @@ import {
   Profile,
   Form,
   Schedule,
-  ScanScreen
+  ScanScreen,
 } from '../screens';
 import { Header } from './Header';
 
@@ -25,16 +25,18 @@ export const Bookstack = () => {
       screenOptions={{
         header: ({ scene, previous, navigation }) => (
           <Header scene={scene} previous={previous} navigation={navigation} />
-        )
+        ),
       }}
     >
-      <Stack.Screen name="Books" component={Books} />
+      {createCollapsibleStackSub(
+        <Stack.Screen name="Books" component={Books} />
+      )}
       <Stack.Screen name="Detail" component={BookDetail} />
       <Stack.Screen
         name="Form"
         component={Form}
         options={{
-          headerTitle: 'Create Book'
+          headerTitle: 'Create Book',
         }}
       />
     </Stack.Navigator>
@@ -49,7 +51,7 @@ export const ScanStack = () => {
       screenOptions={{
         header: ({ scene, previous, navigation }) => (
           <Header scene={scene} previous={previous} navigation={navigation} />
-        )
+        ),
       }}
     >
       <Stack.Screen name="Schedule" component={Schedule} />
@@ -57,14 +59,14 @@ export const ScanStack = () => {
         name="ScanScreen"
         component={ScanScreen}
         options={{
-          headerTitle: 'Scan'
+          headerTitle: 'Scan',
         }}
       />
       <Stack.Screen
         name="ScanForm"
         component={Form}
         options={{
-          headerTitle: 'Create Book'
+          headerTitle: 'Create Book',
         }}
       />
     </Stack.Navigator>
@@ -79,7 +81,7 @@ export const ProfileStack = () => {
       screenOptions={{
         header: ({ scene, previous, navigation }) => (
           <Header scene={scene} previous={previous} navigation={navigation} />
-        )
+        ),
       }}
     >
       <Stack.Screen name="Auth" component={AuthLoading} />
@@ -92,8 +94,10 @@ export const ProfileStack = () => {
 const Tab = createMaterialBottomTabNavigator();
 
 export const MainTabNavigator = ({ navigation }) => {
-  const isFocused = useIsFocused();
   const theme = useTheme();
+  // const [visible, setVisible] = useState(false);
+  // const _onToggleSnackBar = () => setVisible(!visible);
+  // const _onDismissSnackBar = () => setVisible(false);
   return (
     <React.Fragment>
       <Tab.Navigator
@@ -105,36 +109,42 @@ export const MainTabNavigator = ({ navigation }) => {
           name="Books"
           component={Bookstack}
           options={{
-            tabBarIcon: 'library-books'
+            tabBarIcon: 'library-books',
           }}
         />
         <Tab.Screen
           name="Scan"
           component={ScanStack}
           options={{
-            tabBarIcon: 'barcode-scan'
+            tabBarIcon: 'barcode-scan',
           }}
         />
         <Tab.Screen
           name="Profile"
           component={ProfileStack}
           options={{
-            tabBarIcon: 'bell-outline'
+            tabBarIcon: 'bell-outline',
           }}
         />
       </Tab.Navigator>
       {/*<Portal>
-        <FAB
-          visible={isFocused}
-          icon="feather"
-          onPress={() => navigation.navigate('Form', { item: {} })}
+        <Snackbar
+          visible={visible}
+          onDismiss={_onDismissSnackBar}
           style={{
             backgroundColor: theme.colors.background,
             position: 'absolute',
-            bottom: 100,
-            right: 16
+            bottom: 60,
           }}
-        />
+          action={{
+            label: 'OK',
+            onPress: () => {
+              _onToggleSnackBar();
+            },
+          }}
+        >
+          Welcome
+        </Snackbar>
         </Portal>*/}
     </React.Fragment>
   );

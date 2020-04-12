@@ -1,6 +1,6 @@
 import React from 'react';
-import { useRoute } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native';
+import { useRoute, useTheme } from '@react-navigation/native';
+import { ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
 import { CardView } from '../components';
 
@@ -8,17 +8,21 @@ interface Props {
   navigation;
 }
 
-const BookDetail: React.FC<Props> = props => {
+const BookDetail: React.FC<Props> = (props) => {
   const route = useRoute();
+  const theme = useTheme();
   const { item } = route.params as any;
   const { navigation } = props;
 
   return (
-    <SafeAreaView>
+    <ScrollView keyboardDismissMode="interactive">
       <CardView {...(item as any)} />
       <Button
+        mode="outlined"
+        labelStyle={{ color: theme.colors.text }}
         style={{
-          marginTop: 20
+          marginVertical: 5,
+          backgroundColor: theme.colors.background,
         }}
         onPress={() => {
           navigation.navigate('Form', { item });
@@ -26,7 +30,7 @@ const BookDetail: React.FC<Props> = props => {
       >
         Edit Book
       </Button>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 

@@ -1,30 +1,18 @@
 import React, { useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  ScrollView,
-  findNodeHandle,
-} from 'react-native';
+import { View, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { useCreateBookMutation, useDeleteBookMutation } from '../../graphql';
-import {
-  Button,
-  TextInput,
-  useTheme,
-  List,
-  Card,
-  Snackbar,
-} from 'react-native-paper';
+import { Button, TextInput, useTheme, List, Card } from 'react-native-paper';
 import { TagSlider } from '../components';
 
 const { width } = Dimensions.get('window');
 
-export default function PlaceForm(props) {
+export default function BookForm(props) {
   const theme = useTheme();
   const route = useRoute();
   const { navigation } = props;
-  const { item } = route.params as any;
+  const { item } = (route.params as any) || {};
+  const { volumeInfo, id } = item || {};
   const {
     authors,
     categories,
@@ -33,7 +21,7 @@ export default function PlaceForm(props) {
     language,
     thumbnail,
     title,
-  } = (item && item.volumeInfo) || {};
+  } = volumeInfo || {};
   const [name, setName] = useState(title || '');
   const [summary, setSummary] = useState(description || '');
   const [imageUrl, setImageUrl] = useState(thumbnail || '');
@@ -48,6 +36,11 @@ export default function PlaceForm(props) {
       ''
   );
   const [languageCode, setLanguage] = useState(language || '');
+
+  let tags;
+  if (genres) {
+    tags = [...genres, isbn, languageCode];
+  }
 
   // Create Book
   const [createBookMutation] = useCreateBookMutation({
@@ -64,25 +57,12 @@ export default function PlaceForm(props) {
   //   }
   // });
 
-  // Delete Place
-  // const [deletePlaceMutation] = useDeletePlaceMutation({
-  //   async onCompleted(id) {
-  //     navigation.navigate('Profile');
-  //   }
-  // });
-
-  function onInputFocus(refName) {
-    setTimeout(() => {
-      let scrollResponder = this.scrollView.getScrollResponder();
-      scrollResponder.scrollResponderScrollNativeHandleToKeyboard(
-        findNodeHandle(refName),
-        150, // additionalOffset
-        true
-      );
-    }, 100);
-  }
-
-  const tags = [...genres, isbn, languageCode];
+  // Delete Book
+  const [deleteBookMutation] = useDeleteBookMutation({
+    async onCompleted(id) {
+      navigation.navigate('Books');
+    },
+  });
 
   return (
     <ScrollView keyboardDismissMode="interactive">
@@ -174,7 +154,7 @@ export default function PlaceForm(props) {
                   isbn,
                   author: author,
                   language: languageCode,
-                  genres: [genres],
+                  genres: genres,
                 },
               });
             }}
@@ -188,10 +168,9 @@ export default function PlaceForm(props) {
               marginVertical: 5,
               backgroundColor: theme.colors.accent,
             }}
-            onPress={
-              () => {}
-              // deleteBookMutation({ variables: { id: parseInt(item.id) } })
-            }
+            onPress={() => {
+              deleteBookMutation({ variables: { id: item.id } });
+            }}
           >
             Delete Book
           </Button>

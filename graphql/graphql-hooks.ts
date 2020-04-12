@@ -4,252 +4,286 @@ import * as ApolloReactHooks from '@apollo/react-hooks';
 export type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string,
-  String: string,
-  Boolean: boolean,
-  Int: number,
-  Float: number,
-  DateTime: any,
-  Date: any,
-  GenericScalar: any,
+  ID: string;
+  String: string;
+  Boolean: boolean;
+  Int: number;
+  Float: number;
+  /**
+   * The `DateTime` scalar type represents a DateTime
+   * value as specified by
+   * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+   */
+  DateTime: any;
+  /**
+   * The `Date` scalar type represents a Date
+   * value as specified by
+   * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+   */
+  Date: any;
+  /**
+   * The `GenericScalar` scalar type represents a generic
+   * GraphQL scalar value that could be:
+   * String, Boolean, Int, Float, List or Object.
+   */
+  GenericScalar: any;
 };
 
 export type AuthorType = {
-   __typename?: 'AuthorType',
-  id: Scalars['ID'],
-  firstName: Scalars['String'],
-  lastName: Scalars['String'],
-  dateOfBirth?: Maybe<Scalars['Date']>,
-  dateOfDeath?: Maybe<Scalars['Date']>,
-  slug: Scalars['String'],
-  bookSet: Array<BookType>,
+   __typename?: 'AuthorType';
+  id: Scalars['ID'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  dateOfBirth?: Maybe<Scalars['Date']>;
+  dateOfDeath?: Maybe<Scalars['Date']>;
+  slug: Scalars['String'];
+  bookSet: Array<BookType>;
 };
 
 export type BookCreate = {
-   __typename?: 'BookCreate',
-  book?: Maybe<BookType>,
+   __typename?: 'BookCreate';
+  book?: Maybe<BookType>;
 };
 
 export type BookDelete = {
-   __typename?: 'BookDelete',
-  ok?: Maybe<Scalars['Boolean']>,
+   __typename?: 'BookDelete';
+  ok?: Maybe<Scalars['Boolean']>;
 };
 
 export type BookInputType = {
-  title?: Maybe<Scalars['String']>,
-  summary?: Maybe<Scalars['String']>,
-  isbn?: Maybe<Scalars['String']>,
-  image?: Maybe<Scalars['String']>,
-  language?: Maybe<Scalars['String']>,
-  author?: Maybe<Scalars['String']>,
-  genres?: Maybe<Array<Maybe<Scalars['String']>>>,
+  title?: Maybe<Scalars['String']>;
+  summary?: Maybe<Scalars['String']>;
+  isbn?: Maybe<Scalars['String']>;
+  image?: Maybe<Scalars['String']>;
+  language?: Maybe<Scalars['String']>;
+  author?: Maybe<Scalars['String']>;
+  genres?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type BookType = {
-   __typename?: 'BookType',
-  id: Scalars['ID'],
-  title: Scalars['String'],
-  author?: Maybe<AuthorType>,
-  slug: Scalars['String'],
-  summary: Scalars['String'],
-  isbn: Scalars['String'],
-  genre: Array<GenreType>,
-  language?: Maybe<LanguageType>,
-  image: Scalars['String'],
-  reviewSet: Array<ReviewType>,
+   __typename?: 'BookType';
+  id: Scalars['ID'];
+  title: Scalars['String'];
+  author?: Maybe<AuthorType>;
+  slug: Scalars['String'];
+  /** Enter a brief description of the book */
+  summary: Scalars['String'];
+  /** 13 Character <a href="https://www.isbn-international.org/content/what-isbn">ISBN number</a> */
+  isbn: Scalars['String'];
+  /** Select a genre for this book */
+  genre: Array<GenreType>;
+  language?: Maybe<LanguageType>;
+  /** Book cover image link */
+  image: Scalars['String'];
+  reviewSet: Array<ReviewType>;
 };
 
 
 
 
 export type GenreType = {
-   __typename?: 'GenreType',
-  id: Scalars['ID'],
-  name: Scalars['String'],
-  slug: Scalars['String'],
-  bookSet: Array<BookType>,
+   __typename?: 'GenreType';
+  id: Scalars['ID'];
+  /** Enter a book genre (e.g. Science Fiction) */
+  name: Scalars['String'];
+  slug: Scalars['String'];
+  /** Select a genre for this book */
+  bookSet: Array<BookType>;
 };
 
 export type LanguageType = {
-   __typename?: 'LanguageType',
-  id: Scalars['ID'],
-  name: Scalars['String'],
-  slug: Scalars['String'],
-  bookSet: Array<BookType>,
+   __typename?: 'LanguageType';
+  id: Scalars['ID'];
+  /** Enter the book's natural language (e.g. English, French, Japanese etc.) */
+  name: Scalars['String'];
+  slug: Scalars['String'];
+  bookSet: Array<BookType>;
 };
 
 export type Mutation = {
-   __typename?: 'Mutation',
-  userCreate?: Maybe<UserCreate>,
-  tokenAuth?: Maybe<ObtainJsonWebToken>,
-  verifyToken?: Maybe<Verify>,
-  refreshToken?: Maybe<Refresh>,
-  createReview?: Maybe<ReviewCreate>,
-  deleteReview?: Maybe<ReviewDelete>,
-  createBook?: Maybe<BookCreate>,
-  deleteBook?: Maybe<BookDelete>,
+   __typename?: 'Mutation';
+  userCreate?: Maybe<UserCreate>;
+  /** Obtain JSON Web Token mutation */
+  tokenAuth?: Maybe<ObtainJsonWebToken>;
+  verifyToken?: Maybe<Verify>;
+  refreshToken?: Maybe<Refresh>;
+  createReview?: Maybe<ReviewCreate>;
+  deleteReview?: Maybe<ReviewDelete>;
+  createBook?: Maybe<BookCreate>;
+  deleteBook?: Maybe<BookDelete>;
 };
 
 
 export type MutationUserCreateArgs = {
-  email: Scalars['String'],
-  password: Scalars['String'],
-  username: Scalars['String']
+  email: Scalars['String'];
+  password: Scalars['String'];
+  username: Scalars['String'];
 };
 
 
 export type MutationTokenAuthArgs = {
-  username: Scalars['String'],
-  password: Scalars['String']
+  username: Scalars['String'];
+  password: Scalars['String'];
 };
 
 
 export type MutationVerifyTokenArgs = {
-  token?: Maybe<Scalars['String']>
+  token?: Maybe<Scalars['String']>;
 };
 
 
 export type MutationRefreshTokenArgs = {
-  token?: Maybe<Scalars['String']>
+  token?: Maybe<Scalars['String']>;
 };
 
 
 export type MutationCreateReviewArgs = {
-  input: ReviewInputType
+  input: ReviewInputType;
 };
 
 
 export type MutationDeleteReviewArgs = {
-  id: Scalars['ID']
+  id: Scalars['ID'];
 };
 
 
 export type MutationCreateBookArgs = {
-  input: BookInputType
+  input: BookInputType;
 };
 
 
 export type MutationDeleteBookArgs = {
-  id: Scalars['ID']
+  id: Scalars['ID'];
 };
 
+/** Obtain JSON Web Token mutation */
 export type ObtainJsonWebToken = {
-   __typename?: 'ObtainJSONWebToken',
-  payload: Scalars['GenericScalar'],
-  refreshExpiresIn: Scalars['Int'],
-  token: Scalars['String'],
+   __typename?: 'ObtainJSONWebToken';
+  payload: Scalars['GenericScalar'];
+  refreshExpiresIn: Scalars['Int'];
+  token: Scalars['String'];
 };
 
 export type Query = {
-   __typename?: 'Query',
-  currentUser?: Maybe<UserType>,
-  books?: Maybe<Array<Maybe<BookType>>>,
-  book?: Maybe<BookType>,
-  authors?: Maybe<Array<Maybe<AuthorType>>>,
-  author?: Maybe<AuthorType>,
+   __typename?: 'Query';
+  currentUser?: Maybe<UserType>;
+  books?: Maybe<Array<Maybe<BookType>>>;
+  book?: Maybe<BookType>;
+  authors?: Maybe<Array<Maybe<AuthorType>>>;
+  author?: Maybe<AuthorType>;
 };
 
 
 export type QueryBooksArgs = {
-  search?: Maybe<Scalars['String']>,
-  limit?: Maybe<Scalars['Int']>,
-  offset?: Maybe<Scalars['Int']>
+  search?: Maybe<Scalars['String']>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
 };
 
 
 export type QueryBookArgs = {
-  id: Scalars['ID']
+  id: Scalars['ID'];
 };
 
 
 export type QueryAuthorArgs = {
-  id: Scalars['ID']
+  id: Scalars['ID'];
 };
 
 export type Refresh = {
-   __typename?: 'Refresh',
-  payload: Scalars['GenericScalar'],
-  refreshExpiresIn: Scalars['Int'],
-  token: Scalars['String'],
+   __typename?: 'Refresh';
+  payload: Scalars['GenericScalar'];
+  refreshExpiresIn: Scalars['Int'];
+  token: Scalars['String'];
 };
 
 export type ReviewCreate = {
-   __typename?: 'ReviewCreate',
-  review?: Maybe<ReviewType>,
+   __typename?: 'ReviewCreate';
+  review?: Maybe<ReviewType>;
 };
 
 export type ReviewDelete = {
-   __typename?: 'ReviewDelete',
-  ok?: Maybe<Scalars['Boolean']>,
+   __typename?: 'ReviewDelete';
+  ok?: Maybe<Scalars['Boolean']>;
 };
 
 export type ReviewInputType = {
-  user?: Maybe<Scalars['ID']>,
-  comment?: Maybe<Scalars['String']>,
-  value?: Maybe<Scalars['Int']>,
-  book?: Maybe<Scalars['ID']>,
+  user?: Maybe<Scalars['ID']>;
+  comment?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['Int']>;
+  book?: Maybe<Scalars['ID']>;
 };
 
 export type ReviewType = {
-   __typename?: 'ReviewType',
-  id: Scalars['ID'],
-  book: BookType,
-  user: UserType,
-  pubDate: Scalars['DateTime'],
-  comment: Scalars['String'],
-  value: ReviewValue,
+   __typename?: 'ReviewType';
+  id: Scalars['ID'];
+  book: BookType;
+  user: UserType;
+  pubDate: Scalars['DateTime'];
+  comment: Scalars['String'];
+  value: ReviewValue;
 };
 
+/** An enumeration. */
 export enum ReviewValue {
+  /** 5 */
   A_5 = 'A_5',
+  /** 4 */
   A_4 = 'A_4',
+  /** 3 */
   A_3 = 'A_3',
+  /** 2 */
   A_2 = 'A_2',
+  /** 1 */
   A_1 = 'A_1'
 }
 
 export type UserCreate = {
-   __typename?: 'UserCreate',
-  user?: Maybe<UserType>,
+   __typename?: 'UserCreate';
+  user?: Maybe<UserType>;
 };
 
 export type UserType = {
-   __typename?: 'UserType',
-  id: Scalars['ID'],
-  lastLogin?: Maybe<Scalars['DateTime']>,
-  isSuperuser: Scalars['Boolean'],
-  username: Scalars['String'],
-  firstName: Scalars['String'],
-  lastName: Scalars['String'],
-  email: Scalars['String'],
-  isStaff: Scalars['Boolean'],
-  isActive: Scalars['Boolean'],
-  dateJoined: Scalars['DateTime'],
-  reviewSet: Array<ReviewType>,
+   __typename?: 'UserType';
+  id: Scalars['ID'];
+  lastLogin?: Maybe<Scalars['DateTime']>;
+  /** Designates that this user has all permissions without explicitly assigning them. */
+  isSuperuser: Scalars['Boolean'];
+  /** Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only. */
+  username: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  email: Scalars['String'];
+  /** Designates whether the user can log into this admin site. */
+  isStaff: Scalars['Boolean'];
+  /** Designates whether this user should be treated as active. Unselect this instead of deleting accounts. */
+  isActive: Scalars['Boolean'];
+  dateJoined: Scalars['DateTime'];
+  reviewSet: Array<ReviewType>;
 };
 
 export type Verify = {
-   __typename?: 'Verify',
-  payload: Scalars['GenericScalar'],
+   __typename?: 'Verify';
+  payload: Scalars['GenericScalar'];
 };
 
 export type BookQueryVariables = {
-  id: Scalars['ID']
+  id: Scalars['ID'];
 };
 
 
 export type BookQuery = (
   { __typename?: 'Query' }
-  & { book: Maybe<(
+  & { book?: Maybe<(
     { __typename?: 'BookType' }
     & Pick<BookType, 'id' | 'title' | 'summary' | 'isbn' | 'image'>
-    & { author: Maybe<(
+    & { author?: Maybe<(
       { __typename?: 'AuthorType' }
       & Pick<AuthorType, 'firstName' | 'lastName'>
     )>, genre: Array<(
       { __typename?: 'GenreType' }
       & Pick<GenreType, 'name'>
-    )>, language: Maybe<(
+    )>, language?: Maybe<(
       { __typename?: 'LanguageType' }
       & Pick<LanguageType, 'name'>
     )>, reviewSet: Array<(
@@ -263,21 +297,25 @@ export type BookQuery = (
   )> }
 );
 
-export type BooksQueryVariables = {};
+export type BooksQueryVariables = {
+  search?: Maybe<Scalars['String']>;
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+};
 
 
 export type BooksQuery = (
   { __typename?: 'Query' }
-  & { books: Maybe<Array<Maybe<(
+  & { books?: Maybe<Array<Maybe<(
     { __typename?: 'BookType' }
     & Pick<BookType, 'id' | 'title' | 'summary' | 'isbn' | 'image'>
-    & { author: Maybe<(
+    & { author?: Maybe<(
       { __typename?: 'AuthorType' }
       & Pick<AuthorType, 'firstName' | 'lastName'>
     )>, genre: Array<(
       { __typename?: 'GenreType' }
       & Pick<GenreType, 'name'>
-    )>, language: Maybe<(
+    )>, language?: Maybe<(
       { __typename?: 'LanguageType' }
       & Pick<LanguageType, 'name'>
     )>, reviewSet: Array<(
@@ -292,24 +330,24 @@ export type BooksQuery = (
 );
 
 export type CreateBookMutationVariables = {
-  title: Scalars['String'],
-  summary: Scalars['String'],
-  isbn: Scalars['String'],
-  language: Scalars['String'],
-  author: Scalars['String'],
-  image: Scalars['String'],
-  genres?: Maybe<Array<Maybe<Scalars['String']>>>
+  title: Scalars['String'];
+  summary: Scalars['String'];
+  isbn: Scalars['String'];
+  language: Scalars['String'];
+  author: Scalars['String'];
+  image: Scalars['String'];
+  genres?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 
 export type CreateBookMutation = (
   { __typename?: 'Mutation' }
-  & { createBook: Maybe<(
+  & { createBook?: Maybe<(
     { __typename?: 'BookCreate' }
-    & { book: Maybe<(
+    & { book?: Maybe<(
       { __typename?: 'BookType' }
       & Pick<BookType, 'title' | 'image'>
-      & { author: Maybe<(
+      & { author?: Maybe<(
         { __typename?: 'AuthorType' }
         & Pick<AuthorType, 'firstName' | 'lastName'>
       )> }
@@ -318,17 +356,17 @@ export type CreateBookMutation = (
 );
 
 export type UserCreateMutationVariables = {
-  email: Scalars['String'],
-  username: Scalars['String'],
-  password: Scalars['String']
+  email: Scalars['String'];
+  username: Scalars['String'];
+  password: Scalars['String'];
 };
 
 
 export type UserCreateMutation = (
   { __typename?: 'Mutation' }
-  & { userCreate: Maybe<(
+  & { userCreate?: Maybe<(
     { __typename?: 'UserCreate' }
-    & { user: Maybe<(
+    & { user?: Maybe<(
       { __typename?: 'UserType' }
       & Pick<UserType, 'id' | 'username' | 'email' | 'isStaff' | 'isSuperuser'>
     )> }
@@ -340,7 +378,7 @@ export type CurrentUserQueryVariables = {};
 
 export type CurrentUserQuery = (
   { __typename?: 'Query' }
-  & { currentUser: Maybe<(
+  & { currentUser?: Maybe<(
     { __typename?: 'UserType' }
     & Pick<UserType, 'id' | 'username' | 'email' | 'isStaff' | 'isSuperuser' | 'firstName' | 'lastName'>
     & { reviewSet: Array<(
@@ -349,7 +387,7 @@ export type CurrentUserQuery = (
       & { book: (
         { __typename?: 'BookType' }
         & Pick<BookType, 'title'>
-        & { author: Maybe<(
+        & { author?: Maybe<(
           { __typename?: 'AuthorType' }
           & Pick<AuthorType, 'firstName' | 'lastName'>
         )> }
@@ -359,27 +397,27 @@ export type CurrentUserQuery = (
 );
 
 export type DeleteBookMutationVariables = {
-  id: Scalars['ID']
+  id: Scalars['ID'];
 };
 
 
 export type DeleteBookMutation = (
   { __typename?: 'Mutation' }
-  & { deleteBook: Maybe<(
+  & { deleteBook?: Maybe<(
     { __typename?: 'BookDelete' }
     & Pick<BookDelete, 'ok'>
   )> }
 );
 
 export type LoginMutationVariables = {
-  username: Scalars['String'],
-  password: Scalars['String']
+  username: Scalars['String'];
+  password: Scalars['String'];
 };
 
 
 export type LoginMutation = (
   { __typename?: 'Mutation' }
-  & { tokenAuth: Maybe<(
+  & { tokenAuth?: Maybe<(
     { __typename?: 'ObtainJSONWebToken' }
     & Pick<ObtainJsonWebToken, 'token' | 'refreshExpiresIn' | 'payload'>
   )> }
@@ -419,7 +457,7 @@ export const BookDocument = gql`
  * __useBookQuery__
  *
  * To run a query within a React component, call `useBookQuery` and pass it any options that fit your needs.
- * When your component renders, `useBookQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useBookQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -441,8 +479,8 @@ export type BookQueryHookResult = ReturnType<typeof useBookQuery>;
 export type BookLazyQueryHookResult = ReturnType<typeof useBookLazyQuery>;
 export type BookQueryResult = ApolloReactCommon.QueryResult<BookQuery, BookQueryVariables>;
 export const BooksDocument = gql`
-    query Books {
-  books {
+    query Books($search: String, $offset: Int, $limit: Int) {
+  books(search: $search, offset: $offset, limit: $limit) {
     id
     title
     author {
@@ -473,7 +511,7 @@ export const BooksDocument = gql`
  * __useBooksQuery__
  *
  * To run a query within a React component, call `useBooksQuery` and pass it any options that fit your needs.
- * When your component renders, `useBooksQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useBooksQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -481,6 +519,9 @@ export const BooksDocument = gql`
  * @example
  * const { data, loading, error } = useBooksQuery({
  *   variables: {
+ *      search: // value for 'search'
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
@@ -608,7 +649,7 @@ export const CurrentUserDocument = gql`
  * __useCurrentUserQuery__
  *
  * To run a query within a React component, call `useCurrentUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;

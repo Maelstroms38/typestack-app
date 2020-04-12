@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useTheme, Text } from 'react-native-paper';
+import { useTheme, Text, Title } from 'react-native-paper';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { RoundedButton } from '../components';
@@ -21,17 +21,16 @@ export default function Schedule(props) {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.primary }]}>
-      <Text
+      <Title
         style={{
           textAlign: 'center',
-          fontSize: 22,
           color: '#fff',
           lineHeight: 38,
-          fontWeight: 'bold'
+          fontWeight: 'bold',
         }}
       >
         Scan Books
-      </Text>
+      </Title>
       {hasPermission === null ? (
         <View>
           <Ionicons
@@ -45,7 +44,7 @@ export default function Schedule(props) {
               textAlign: 'center',
               fontSize: 16,
               color: '#fff',
-              lineHeight: 38
+              lineHeight: 38,
             }}
           >
             Requesting for camera permission
@@ -64,7 +63,7 @@ export default function Schedule(props) {
             textColor={theme.colors.primary}
             onPress={async () => {
               const {
-                granted
+                granted,
               } = await BarCodeScanner.requestPermissionsAsync();
               setHasPermission(granted);
             }}
@@ -83,7 +82,7 @@ export default function Schedule(props) {
               textAlign: 'center',
               fontSize: 16,
               color: '#fff',
-              lineHeight: 38
+              lineHeight: 38,
             }}
           >
             No access to camera
@@ -102,7 +101,7 @@ export default function Schedule(props) {
             textColor={theme.colors.primary}
             onPress={async () => {
               const {
-                granted
+                granted,
               } = await BarCodeScanner.requestPermissionsAsync();
               setHasPermission(granted);
             }}
@@ -118,7 +117,7 @@ export default function Schedule(props) {
               style={{ left: 20 }}
             />
           }
-          text="Start Scan"
+          text="Start"
           backgroundColor="#fff"
           textColor={theme.colors.primary}
           onPress={async () => {
@@ -135,6 +134,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     justifyContent: 'center',
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  },
 });
