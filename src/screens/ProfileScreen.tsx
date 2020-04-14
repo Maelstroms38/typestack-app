@@ -1,23 +1,29 @@
 import React from 'react';
-import { View, FlatList } from 'react-native';
-import {
-  Card,
-  Avatar,
-  ActivityIndicator,
-  IconButton
-} from 'react-native-paper';
+import { View, SafeAreaView, Animated } from 'react-native';
+import { Card, Avatar, ActivityIndicator } from 'react-native-paper';
 import { useCurrentUserQuery } from '../../graphql';
-import { CardView } from '../components';
+import { Poster } from '../components';
+import {
+  useCollapsibleStack,
+  CollapsibleStackSub,
+} from 'react-navigation-collapsible';
+import { useTheme } from 'react-native-paper';
 
 interface Props {
   navigation;
 }
 
-const Profile: React.FC<Props> = props => {
+const Profile: React.FC<Props> = (props) => {
+  const theme = useTheme();
   const { navigation } = props;
-  const { data, loading } = useCurrentUserQuery({
-    fetchPolicy: 'network-only'
+  const { data, loading, refetch } = useCurrentUserQuery({
+    fetchPolicy: 'cache-and-network',
   });
+  const {
+    onScroll /* Event handler */,
+    containerPaddingTop /* number */,
+    scrollIndicatorInsetTop /* number */,
+  } = useCollapsibleStack();
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -26,35 +32,42 @@ const Profile: React.FC<Props> = props => {
     );
   }
   return (
-    <View>
-      <Card>
-        <Card.Title
-          title={(data.currentUser && data.currentUser.username) || ''}
-          subtitle={(data.currentUser && data.currentUser.email) || ''}
-          left={props => <Avatar.Icon {...props} icon="account" />}
-        />
-      </Card>
-      <FlatList
+    <SafeAreaView>
+      <Animated.FlatList
+        refreshing={loading}
+        onRefresh={() => refetch()}
+        numColumns={2}
         data={
           data && data.currentUser && data.currentUser.reviewSet
             ? data.currentUser.reviewSet
             : []
         }
-        keyExtractor={item => `${item.pubDate}`}
+        onScroll={onScroll}
+        contentContainerStyle={{ paddingTop: containerPaddingTop }}
+        scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
+        keyExtractor={(item) => `${item.pubDate}`}
         renderItem={({ item }) => {
           return (
-            <CardView
+            <Poster
               {...(item as any)}
               onPress={() =>
-                navigation.navigate('Detail', {
-                  item: { ...item, user: data.currentUser }
+                navigation.navigate('Review', {
+                  item,
                 })
               }
             />
           );
         }}
       />
-    </View>
+      <CollapsibleStackSub>
+        <Card.Title
+          title={(data.currentUser && data.currentUser.username) || ''}
+          subtitle={(data.currentUser && data.currentUser.email) || ''}
+          left={(props) => <Avatar.Icon {...props} icon="account" />}
+          style={{ backgroundColor: theme.colors.background }}
+        />
+      </CollapsibleStackSub>
+    </SafeAreaView>
   );
 };
 

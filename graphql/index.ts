@@ -13,7 +13,7 @@ const request = async (operation) => {
   const token = await AsyncStorage.getItem('token');
   operation.setContext({
     headers: {
-      authorization: token,
+      authorization: token ? `JWT ${token}` : '',
     },
   });
 };

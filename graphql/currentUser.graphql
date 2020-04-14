@@ -8,11 +8,14 @@ query CurrentUser {
     firstName
     lastName
     reviewSet {
+      id
       value
       comment
       pubDate
       book {
+        id
         title
+        image
         author {
           firstName
           lastName

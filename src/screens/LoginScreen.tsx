@@ -4,9 +4,9 @@ import {
   StyleSheet,
   Dimensions,
   AsyncStorage,
-  ScrollView
+  ScrollView,
 } from 'react-native';
-// import { useSignUpMutation, useSignInMutation } from '../../graphql';
+import { useLoginMutation, useUserCreateMutation } from '../../graphql';
 import { Button, TextInput, useTheme } from 'react-native-paper';
 
 const { width } = Dimensions.get('window');
@@ -19,46 +19,47 @@ export default function LoginScreen(props) {
   const [email, setEmail] = useState('');
   const [login, setLogin] = useState(false);
 
-  // Signing Up
-  // const [signUpMutation] = useSignUpMutation({
-  //   async onCompleted({ register }) {
-  //     const { token } = register;
-  //     if (token) {
-  //       try {
-  //         await AsyncStorage.setItem('token', token);
-  //         navigation.replace('Profile');
-  //       } catch (err) {
-  //         console.log(err.message);
-  //       }
-  //     }
-  //   }
-  // });
-
   // Signing In
-  // const [signInMutation] = useSignInMutation({
-  //   async onCompleted({ login }) {
-  //     const { token } = login;
-  //     if (token) {
-  //       try {
-  //         await AsyncStorage.setItem('token', token);
-  //         navigation.replace('Profile');
-  //       } catch (err) {
-  //         console.log(err.message);
-  //       }
-  //     }
-  //   }
-  // });
+  const [loginMutation] = useLoginMutation({
+    async onCompleted({ tokenAuth }) {
+      const { token } = tokenAuth;
+      if (token) {
+        try {
+          await AsyncStorage.setItem('token', token);
+          navigation.replace('Profile');
+        } catch (err) {
+          console.log('sign up error:', err.message);
+        }
+      }
+    },
+  });
+
+  // Signing Up
+  const [createUserMutation] = useUserCreateMutation({
+    async onCompleted({ userCreate }) {
+      const { user } = userCreate;
+      if (user) {
+        try {
+          loginMutation({
+            variables: { username: user.username, password },
+          });
+        } catch (err) {
+          console.log('login error:', err.message);
+        }
+      }
+    },
+  });
 
   return (
     <ScrollView
       contentContainerStyle={[
         styles.container,
-        { backgroundColor: theme.colors.background }
+        { backgroundColor: theme.colors.background },
       ]}
     >
       {login ? null : (
         <TextInput
-          onChangeText={text => setUsername(text)}
+          onChangeText={(text) => setUsername(text)}
           value={username}
           placeholder="Username"
           label="Username"
@@ -69,17 +70,17 @@ export default function LoginScreen(props) {
         />
       )}
       <TextInput
-        onChangeText={text => setEmail(text)}
+        onChangeText={(text) => setEmail(text)}
         value={email}
-        placeholder={login ? 'Email or Username' : 'Email'}
-        label={login ? 'Email or Username' : 'Email'}
+        placeholder={login ? 'Username' : 'Email'}
+        label={login ? 'Username' : 'Email'}
         mode="outlined"
         autoCorrect={false}
         autoCapitalize="none"
         style={styles.input}
       />
       <TextInput
-        onChangeText={text => setPassword(text)}
+        onChangeText={(text) => setPassword(text)}
         value={password}
         placeholder="Password"
         label="Password"
@@ -94,21 +95,15 @@ export default function LoginScreen(props) {
           labelStyle={{ color: theme.colors.text }}
           style={{
             backgroundColor: theme.colors.accent,
-            marginTop: 20
+            marginTop: 20,
           }}
           onPress={() => {
             if (login) {
-              // email validation
-              const isEmail = email.includes('@');
-              // isEmail
-              //   ? signInMutation({
-              //       variables: { email, password }
-              //     })
-              //   : signInMutation({
-              //       variables: { username: email, password }
-              //     });
+              loginMutation({
+                variables: { username: email, password },
+              });
             } else {
-              //signUpMutation({ variables: { email, username, password } });
+              createUserMutation({ variables: { email, username, password } });
             }
           }}
         >
@@ -134,14 +129,14 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     paddingHorizontal: 15,
-    paddingVertical: 20
+    paddingVertical: 20,
   },
   input: {
     width: width - 40,
     height: 60,
-    marginTop: 5
+    marginTop: 5,
   },
   buttonContainer: {
-    width: '100%'
-  }
+    width: '100%',
+  },
 });

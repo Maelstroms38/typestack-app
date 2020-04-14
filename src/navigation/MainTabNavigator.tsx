@@ -12,6 +12,7 @@ import {
   Form,
   Schedule,
   ScanScreen,
+  ReviewForm,
 } from '../screens';
 import { Header } from './Header';
 
@@ -86,7 +87,10 @@ export const ProfileStack = () => {
     >
       <Stack.Screen name="Auth" component={AuthLoading} />
       <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Profile" component={Profile} />
+      {createCollapsibleStackSub(
+        <Stack.Screen name="Profile" component={Profile} />
+      )}
+      <Stack.Screen name="Review" component={ReviewForm} />
     </Stack.Navigator>
   );
 };

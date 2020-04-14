@@ -355,6 +355,28 @@ export type CreateBookMutation = (
   )> }
 );
 
+export type CreateReviewMutationVariables = {
+  value: Scalars['Int'];
+  comment: Scalars['String'];
+  book: Scalars['ID'];
+};
+
+
+export type CreateReviewMutation = (
+  { __typename?: 'Mutation' }
+  & { createReview?: Maybe<(
+    { __typename?: 'ReviewCreate' }
+    & { review?: Maybe<(
+      { __typename?: 'ReviewType' }
+      & Pick<ReviewType, 'id' | 'value' | 'comment'>
+      & { user: (
+        { __typename?: 'UserType' }
+        & Pick<UserType, 'username'>
+      ) }
+    )> }
+  )> }
+);
+
 export type UserCreateMutationVariables = {
   email: Scalars['String'];
   username: Scalars['String'];
@@ -383,10 +405,10 @@ export type CurrentUserQuery = (
     & Pick<UserType, 'id' | 'username' | 'email' | 'isStaff' | 'isSuperuser' | 'firstName' | 'lastName'>
     & { reviewSet: Array<(
       { __typename?: 'ReviewType' }
-      & Pick<ReviewType, 'value' | 'comment' | 'pubDate'>
+      & Pick<ReviewType, 'id' | 'value' | 'comment' | 'pubDate'>
       & { book: (
         { __typename?: 'BookType' }
-        & Pick<BookType, 'title'>
+        & Pick<BookType, 'id' | 'title' | 'image'>
         & { author?: Maybe<(
           { __typename?: 'AuthorType' }
           & Pick<AuthorType, 'firstName' | 'lastName'>
@@ -409,6 +431,19 @@ export type DeleteBookMutation = (
   )> }
 );
 
+export type DeleteReviewMutationVariables = {
+  id: Scalars['ID'];
+};
+
+
+export type DeleteReviewMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteReview?: Maybe<(
+    { __typename?: 'ReviewDelete' }
+    & Pick<ReviewDelete, 'ok'>
+  )> }
+);
+
 export type LoginMutationVariables = {
   username: Scalars['String'];
   password: Scalars['String'];
@@ -420,6 +455,32 @@ export type LoginMutation = (
   & { tokenAuth?: Maybe<(
     { __typename?: 'ObtainJSONWebToken' }
     & Pick<ObtainJsonWebToken, 'token' | 'refreshExpiresIn' | 'payload'>
+  )> }
+);
+
+export type RefreshMutationVariables = {
+  token: Scalars['String'];
+};
+
+
+export type RefreshMutation = (
+  { __typename?: 'Mutation' }
+  & { refreshToken?: Maybe<(
+    { __typename?: 'Refresh' }
+    & Pick<Refresh, 'refreshExpiresIn' | 'payload' | 'token'>
+  )> }
+);
+
+export type VerifyMutationVariables = {
+  token: Scalars['String'];
+};
+
+
+export type VerifyMutation = (
+  { __typename?: 'Mutation' }
+  & { verifyToken?: Maybe<(
+    { __typename?: 'Verify' }
+    & Pick<Verify, 'payload'>
   )> }
 );
 
@@ -579,6 +640,47 @@ export function useCreateBookMutation(baseOptions?: ApolloReactHooks.MutationHoo
 export type CreateBookMutationHookResult = ReturnType<typeof useCreateBookMutation>;
 export type CreateBookMutationResult = ApolloReactCommon.MutationResult<CreateBookMutation>;
 export type CreateBookMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateBookMutation, CreateBookMutationVariables>;
+export const CreateReviewDocument = gql`
+    mutation CreateReview($value: Int!, $comment: String!, $book: ID!) {
+  createReview(input: {book: $book, value: $value, comment: $comment}) {
+    review {
+      id
+      value
+      comment
+      user {
+        username
+      }
+    }
+  }
+}
+    `;
+export type CreateReviewMutationFn = ApolloReactCommon.MutationFunction<CreateReviewMutation, CreateReviewMutationVariables>;
+
+/**
+ * __useCreateReviewMutation__
+ *
+ * To run a mutation, you first call `useCreateReviewMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateReviewMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createReviewMutation, { data, loading, error }] = useCreateReviewMutation({
+ *   variables: {
+ *      value: // value for 'value'
+ *      comment: // value for 'comment'
+ *      book: // value for 'book'
+ *   },
+ * });
+ */
+export function useCreateReviewMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateReviewMutation, CreateReviewMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateReviewMutation, CreateReviewMutationVariables>(CreateReviewDocument, baseOptions);
+      }
+export type CreateReviewMutationHookResult = ReturnType<typeof useCreateReviewMutation>;
+export type CreateReviewMutationResult = ApolloReactCommon.MutationResult<CreateReviewMutation>;
+export type CreateReviewMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateReviewMutation, CreateReviewMutationVariables>;
 export const UserCreateDocument = gql`
     mutation UserCreate($email: String!, $username: String!, $password: String!) {
   userCreate(email: $email, username: $username, password: $password) {
@@ -630,11 +732,14 @@ export const CurrentUserDocument = gql`
     firstName
     lastName
     reviewSet {
+      id
       value
       comment
       pubDate
       book {
+        id
         title
+        image
         author {
           firstName
           lastName
@@ -701,6 +806,38 @@ export function useDeleteBookMutation(baseOptions?: ApolloReactHooks.MutationHoo
 export type DeleteBookMutationHookResult = ReturnType<typeof useDeleteBookMutation>;
 export type DeleteBookMutationResult = ApolloReactCommon.MutationResult<DeleteBookMutation>;
 export type DeleteBookMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteBookMutation, DeleteBookMutationVariables>;
+export const DeleteReviewDocument = gql`
+    mutation DeleteReview($id: ID!) {
+  deleteReview(id: $id) {
+    ok
+  }
+}
+    `;
+export type DeleteReviewMutationFn = ApolloReactCommon.MutationFunction<DeleteReviewMutation, DeleteReviewMutationVariables>;
+
+/**
+ * __useDeleteReviewMutation__
+ *
+ * To run a mutation, you first call `useDeleteReviewMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteReviewMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteReviewMutation, { data, loading, error }] = useDeleteReviewMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteReviewMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteReviewMutation, DeleteReviewMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeleteReviewMutation, DeleteReviewMutationVariables>(DeleteReviewDocument, baseOptions);
+      }
+export type DeleteReviewMutationHookResult = ReturnType<typeof useDeleteReviewMutation>;
+export type DeleteReviewMutationResult = ApolloReactCommon.MutationResult<DeleteReviewMutation>;
+export type DeleteReviewMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteReviewMutation, DeleteReviewMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($username: String!, $password: String!) {
   tokenAuth(username: $username, password: $password) {
@@ -736,3 +873,69 @@ export function useLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOpti
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = ApolloReactCommon.MutationResult<LoginMutation>;
 export type LoginMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const RefreshDocument = gql`
+    mutation Refresh($token: String!) {
+  refreshToken(token: $token) {
+    refreshExpiresIn
+    payload
+    token
+  }
+}
+    `;
+export type RefreshMutationFn = ApolloReactCommon.MutationFunction<RefreshMutation, RefreshMutationVariables>;
+
+/**
+ * __useRefreshMutation__
+ *
+ * To run a mutation, you first call `useRefreshMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRefreshMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [refreshMutation, { data, loading, error }] = useRefreshMutation({
+ *   variables: {
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useRefreshMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RefreshMutation, RefreshMutationVariables>) {
+        return ApolloReactHooks.useMutation<RefreshMutation, RefreshMutationVariables>(RefreshDocument, baseOptions);
+      }
+export type RefreshMutationHookResult = ReturnType<typeof useRefreshMutation>;
+export type RefreshMutationResult = ApolloReactCommon.MutationResult<RefreshMutation>;
+export type RefreshMutationOptions = ApolloReactCommon.BaseMutationOptions<RefreshMutation, RefreshMutationVariables>;
+export const VerifyDocument = gql`
+    mutation Verify($token: String!) {
+  verifyToken(token: $token) {
+    payload
+  }
+}
+    `;
+export type VerifyMutationFn = ApolloReactCommon.MutationFunction<VerifyMutation, VerifyMutationVariables>;
+
+/**
+ * __useVerifyMutation__
+ *
+ * To run a mutation, you first call `useVerifyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVerifyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [verifyMutation, { data, loading, error }] = useVerifyMutation({
+ *   variables: {
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useVerifyMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<VerifyMutation, VerifyMutationVariables>) {
+        return ApolloReactHooks.useMutation<VerifyMutation, VerifyMutationVariables>(VerifyDocument, baseOptions);
+      }
+export type VerifyMutationHookResult = ReturnType<typeof useVerifyMutation>;
+export type VerifyMutationResult = ApolloReactCommon.MutationResult<VerifyMutation>;
+export type VerifyMutationOptions = ApolloReactCommon.BaseMutationOptions<VerifyMutation, VerifyMutationVariables>;
