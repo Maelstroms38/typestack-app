@@ -2,21 +2,27 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { Books } from '../screens';
+import { Dimensions } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { createCollapsibleStackSub } from 'react-navigation-collapsible';
 import {
   BookDetail,
   AuthLoading,
   Login,
-  Profile,
+  ProfileBooks,
+  ProfileReviews,
   Form,
   Schedule,
   ScanScreen,
   ReviewForm,
 } from '../screens';
 import { Header } from './Header';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 const Stack = createStackNavigator();
+const TopTab = createMaterialTopTabNavigator();
+const Tab = createMaterialBottomTabNavigator();
+const { width } = Dimensions.get('window');
 
 export const Bookstack = () => {
   return (
@@ -40,6 +46,7 @@ export const Bookstack = () => {
           headerTitle: 'Create Book',
         }}
       />
+      <Stack.Screen name="Review" component={ReviewForm} />
     </Stack.Navigator>
   );
 };
@@ -74,6 +81,38 @@ export const ScanStack = () => {
   );
 };
 
+function ProfileTabNavigator() {
+  const theme = useTheme();
+  return (
+    <TopTab.Navigator
+      tabBarOptions={{
+        scrollEnabled: true,
+        tabStyle: {
+          width: width / 2,
+        },
+        style: {
+          fontSize: 24,
+          fontWeight: '700',
+          backgroundColor: theme.colors.background,
+        },
+        labelStyle: {
+          color: theme.colors.text,
+        },
+        indicatorStyle: {
+          backgroundColor: theme.colors.text,
+        },
+      }}
+    >
+      {createCollapsibleStackSub(
+        <TopTab.Screen name="Bookshelf" component={ProfileBooks} />
+      )}
+      {createCollapsibleStackSub(
+        <TopTab.Screen name="Reviews" component={ProfileReviews} />
+      )}
+    </TopTab.Navigator>
+  );
+}
+
 export const ProfileStack = () => {
   return (
     <Stack.Navigator
@@ -87,15 +126,11 @@ export const ProfileStack = () => {
     >
       <Stack.Screen name="Auth" component={AuthLoading} />
       <Stack.Screen name="Login" component={Login} />
-      {createCollapsibleStackSub(
-        <Stack.Screen name="Profile" component={Profile} />
-      )}
+      <Stack.Screen name="Profile" component={ProfileTabNavigator} />
       <Stack.Screen name="Review" component={ReviewForm} />
     </Stack.Navigator>
   );
 };
-
-const Tab = createMaterialBottomTabNavigator();
 
 export const MainTabNavigator = ({ navigation }) => {
   const theme = useTheme();
@@ -127,7 +162,7 @@ export const MainTabNavigator = ({ navigation }) => {
           name="Profile"
           component={ProfileStack}
           options={{
-            tabBarIcon: 'bell-outline',
+            tabBarIcon: 'account',
           }}
         />
       </Tab.Navigator>

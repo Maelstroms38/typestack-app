@@ -1,0 +1,11 @@
+mutation UpdateReview($id: ID!, $value: Int!, $comment: String!, $book: ID) {
+  updateReview(
+    input: { id: $id, book: $book, value: $value, comment: $comment }
+  ) {
+    review {
+      id
+      value
+      comment
+    }
+  }
+}

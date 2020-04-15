@@ -2,7 +2,8 @@ import Books from './Books';
 import BookDetail from './BookDetail';
 import AuthLoading from './AuthLoading';
 import Login from './LoginScreen';
-import Profile from './ProfileScreen';
+import ProfileBooks from './ProfileBooks';
+import ProfileReviews from './ProfileReviews';
 import Form from './BookForm';
 import Schedule from './Schedule';
 import ScanScreen from './ScanScreen';
@@ -13,7 +14,8 @@ export {
   BookDetail,
   AuthLoading,
   Login,
-  Profile,
+  ProfileReviews,
+  ProfileBooks,
   Form,
   Schedule,
   ScanScreen,

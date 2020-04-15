@@ -1,0 +1,30 @@
+mutation UpdateBookInstance(
+  $id: ID!
+  $status: String!
+  $imprint: String!
+  $borrower: ID
+  $due_back: String
+) {
+  updateBookInstance(
+    input: {
+      id: $id
+      borrower: $borrower
+      imprint: $imprint
+      dueBack: $due_back
+      status: $status
+    }
+  ) {
+    instance {
+      id
+      status
+      imprint
+      owner {
+        username
+      }
+      book {
+        title
+        image
+      }
+    }
+  }
+}

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, SafeAreaView, Animated } from 'react-native';
 import { Card, Avatar, ActivityIndicator } from 'react-native-paper';
 import { useCurrentUserQuery } from '../../graphql';
-import { Poster } from '../components';
+import { CardView } from '../components';
 import {
   useCollapsibleStack,
   CollapsibleStackSub,
@@ -13,7 +13,7 @@ interface Props {
   navigation;
 }
 
-const Profile: React.FC<Props> = (props) => {
+const ProfileBooks: React.FC<Props> = (props) => {
   const theme = useTheme();
   const { navigation } = props;
   const { data, loading, refetch } = useCurrentUserQuery({
@@ -36,23 +36,22 @@ const Profile: React.FC<Props> = (props) => {
       <Animated.FlatList
         refreshing={loading}
         onRefresh={() => refetch()}
-        numColumns={2}
         data={
-          data && data.currentUser && data.currentUser.reviewSet
-            ? data.currentUser.reviewSet
+          data && data.currentUser && data.currentUser.owner
+            ? data.currentUser.owner
             : []
         }
         onScroll={onScroll}
         contentContainerStyle={{ paddingTop: containerPaddingTop }}
         scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
-        keyExtractor={(item) => `${item.pubDate}`}
+        keyExtractor={(item) => `${item.id}`}
         renderItem={({ item }) => {
           return (
-            <Poster
-              {...(item as any)}
+            <CardView
+              {...(item.book as any)}
               onPress={() =>
-                navigation.navigate('Review', {
-                  item,
+                navigation.navigate('Detail', {
+                  item: item.book,
                 })
               }
             />
@@ -71,4 +70,4 @@ const Profile: React.FC<Props> = (props) => {
   );
 };
 
-export default Profile;
+export default ProfileBooks;

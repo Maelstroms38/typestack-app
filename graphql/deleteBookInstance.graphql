@@ -1,0 +1,5 @@
+mutation DeleteBookInstance($id: ID!) {
+  deleteBookInstance(id: $id) {
+    ok
+  }
+}

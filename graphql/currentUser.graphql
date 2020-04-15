@@ -7,6 +7,20 @@ query CurrentUser {
     isSuperuser
     firstName
     lastName
+    owner {
+      id
+      status
+      book {
+        id
+        title
+        image
+        summary
+        author {
+          firstName
+          lastName
+        }
+      }
+    }
     reviewSet {
       id
       value

@@ -23,45 +23,46 @@ export default function Poster(props) {
     book: { title, image },
     onPress,
   } = props;
-  const cleanValue = parseInt(value[value.length - 1]);
   return (
     <TouchableOpacity
       style={styles.container}
       onPress={() =>
-        onPress &&
-        onPress({ id, comment, value: cleanValue, book: { title, image } })
+        onPress && onPress({ id, comment, value, book: { title, image } })
       }
     >
       <View style={styles.imageContainer}>
         <Image source={{ uri: image }} style={styles.image} />
       </View>
-      <Text style={styles.title} numberOfLines={2}>
+      <Text
+        style={[styles.title, { color: theme.colors.text }]}
+        numberOfLines={2}
+      >
         {title}
       </Text>
       <View style={styles.tagContainer}>
         <IconButton
           icon="star"
-          color={cleanValue >= 1 ? theme.colors.primary : '#d3d3d3'}
+          color={value >= 1 ? theme.colors.primary : '#d3d3d3'}
           size={32}
         />
         <IconButton
           icon="star"
-          color={cleanValue >= 2 ? theme.colors.primary : '#d3d3d3'}
+          color={value >= 2 ? theme.colors.primary : '#d3d3d3'}
           size={32}
         />
         <IconButton
           icon="star"
-          color={cleanValue >= 3 ? theme.colors.primary : '#d3d3d3'}
+          color={value >= 3 ? theme.colors.primary : '#d3d3d3'}
           size={32}
         />
         <IconButton
           icon="star"
-          color={cleanValue >= 4 ? theme.colors.primary : '#d3d3d3'}
+          color={value >= 4 ? theme.colors.primary : '#d3d3d3'}
           size={32}
         />
         <IconButton
           icon="star"
-          color={cleanValue >= 5 ? theme.colors.primary : '#d3d3d3'}
+          color={value >= 5 ? theme.colors.primary : '#d3d3d3'}
           size={32}
         />
       </View>

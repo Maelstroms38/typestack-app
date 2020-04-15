@@ -1,0 +1,18 @@
+mutation CreateBookInstance($book: ID!, $imprint: String!, $status: String!) {
+  createBookInstance(
+    input: { book: $book, imprint: $imprint, status: $status }
+  ) {
+    instance {
+      id
+      status
+      imprint
+      owner {
+        username
+      }
+      book {
+        title
+        image
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+mutation UpdateBook(
+  $id: ID!
+  $title: String
+  $summary: String
+  $isbn: String
+  $language: String
+  $author: String
+  $image: String
+  $genres: [String]
+) {
+  updateBook(
+    input: {
+      id: $id
+      title: $title
+      summary: $summary
+      isbn: $isbn
+      image: $image
+      language: $language
+      author: $author
+      genres: $genres
+    }
+  ) {
+    book {
+      title
+      author {
+        firstName
+        lastName
+      }
+      image
+    }
+  }
+}

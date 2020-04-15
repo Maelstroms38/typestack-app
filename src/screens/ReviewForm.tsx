@@ -5,6 +5,7 @@ import {
   useCurrentUserQuery,
   useCreateReviewMutation,
   useDeleteReviewMutation,
+  useUpdateReviewMutation,
 } from '../../graphql';
 import {
   Button,
@@ -27,34 +28,30 @@ export default function ReviewForm(props) {
     id,
     book: { id: bookId, title },
   } = item;
-
-  const cleanValue =
-    typeof item.value == 'string'
-      ? parseInt(item.value[item.value.length - 1])
-      : 0;
-  const [value, setValue] = useState(cleanValue);
+  const [value, setValue] = useState(item.value || 3);
   const { refetch } = useCurrentUserQuery({ fetchPolicy: 'cache-and-network' });
 
   // Create Book
   const [createReviewMutation] = useCreateReviewMutation({
     async onCompleted() {
       refetch();
-      navigation.navigate('Profile');
+      navigation.goBack();
     },
   });
 
   // Update Review
-  // const [updatePlaceMutation] = useUpdatePlaceMutation({
-  //   async onCompleted({ updatePlace }) {
-  //     navigation.navigate('Detail', { item: updatePlace });
-  //   }
-  // });
+  const [updateReviewMutation] = useUpdateReviewMutation({
+    async onCompleted() {
+      refetch();
+      navigation.goBack();
+    },
+  });
 
   // Delete Review
   const [deleteReviewMutation] = useDeleteReviewMutation({
     async onCompleted() {
       refetch();
-      navigation.navigate('Profile');
+      navigation.goBack();
     },
   });
 
@@ -100,8 +97,8 @@ export default function ReviewForm(props) {
             onChangeText={(text) => setComment(text)}
             value={comment}
             multiline
-            placeholder="Comment"
-            label="Comment"
+            placeholder="Comments"
+            label="Comments"
             mode="outlined"
             autoCorrect={false}
             autoCapitalize="none"
@@ -117,27 +114,37 @@ export default function ReviewForm(props) {
               backgroundColor: theme.colors.accent,
             }}
             onPress={() => {
-              createReviewMutation({
-                variables: { comment: comment, value: value, book: bookId },
-              });
-              // id ? editReview({})
+              id
+                ? updateReviewMutation({
+                    variables: {
+                      id,
+                      comment: comment,
+                      value: value,
+                      book: bookId,
+                    },
+                  })
+                : createReviewMutation({
+                    variables: { comment: comment, value: value, book: bookId },
+                  });
             }}
           >
             Save Review
           </Button>
-          <Button
-            mode="outlined"
-            labelStyle={{ color: theme.colors.text }}
-            style={{
-              marginVertical: 5,
-              backgroundColor: theme.colors.accent,
-            }}
-            onPress={() => {
-              deleteReviewMutation({ variables: { id: item.id } });
-            }}
-          >
-            Delete Review
-          </Button>
+          {item.id ? (
+            <Button
+              mode="outlined"
+              labelStyle={{ color: theme.colors.text }}
+              style={{
+                marginVertical: 5,
+                backgroundColor: theme.colors.accent,
+              }}
+              onPress={() => {
+                deleteReviewMutation({ variables: { id: item.id } });
+              }}
+            >
+              Delete Review
+            </Button>
+          ) : null}
         </View>
       </List.Section>
     </ScrollView>
