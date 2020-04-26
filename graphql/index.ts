@@ -5,7 +5,7 @@ import { AsyncStorage } from 'react-native';
 import { ApolloLink, Observable } from 'apollo-link';
 
 const httpLink = new HttpLink({
-  uri: 'http://0.0.0.0:8000/graphql/',
+  uri: 'https://istrand.herokuapp.com/graphql/',
   credentials: 'include',
 });
 
