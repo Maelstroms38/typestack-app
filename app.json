@@ -6,8 +6,8 @@
     "sdkVersion": "36.0.0",
     "platforms": ["ios", "android", "web"],
     "ios": {
-      "bundleIdentifier": "mvp.istrand",
-      "buildNumber": "1.0.0",
+      "bundleIdentifier": "MVP.Strand",
+      "buildNumber": "1.0.1",
       "supportsTablet": true
     },
     "android": {
