@@ -8,29 +8,35 @@ import {
 } from 'react-native';
 import { useLoginMutation, useUserCreateMutation } from '../../graphql';
 import { Button, TextInput, useTheme } from 'react-native-paper';
+import useAlert from '../hooks/use-alert';
 
 const { width } = Dimensions.get('window');
 
-export default function LoginScreen(props) {
+export default function LoginScreen({ navigation }) {
   const theme = useTheme();
-  const { navigation } = props;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [login, setLogin] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const { alert, setMessage } = useAlert({ message: '' });
 
   // Signing In
   const [loginMutation] = useLoginMutation({
     async onCompleted({ tokenAuth }) {
       const { token } = tokenAuth;
-      if (token) {
+      if (token && token.length) {
         try {
           await AsyncStorage.setItem('token', token);
           navigation.replace('Profile');
         } catch (err) {
-          console.log('sign up error:', err.message);
+          setMessage(err.message);
         }
       }
+    },
+    async onError(error) {
+      console.log(error);
+      setMessage(error.message);
     },
   });
 
@@ -44,9 +50,12 @@ export default function LoginScreen(props) {
             variables: { username: user.username, password },
           });
         } catch (err) {
-          console.log('login error:', err.message);
+          setMessage(err.message);
         }
       }
+    },
+    async onError(error) {
+      setMessage(error.message);
     },
   });
 
@@ -88,13 +97,27 @@ export default function LoginScreen(props) {
         autoCorrect={false}
         autoCapitalize="none"
         style={styles.input}
-        secureTextEntry
+        secureTextEntry={!showPassword}
       />
+      <View style={styles.ButtonTextWrapper}>
+        <Button
+          icon={showPassword ? 'eye-off' : 'eye'}
+          mode="outlined"
+          style={{
+            marginTop: 20,
+            backgroundColor: theme.colors.background,
+          }}
+          labelStyle={{ color: theme.colors.text }}
+          onPress={() => setShowPassword(!showPassword)}
+        >
+          {showPassword ? 'Hide Password' : 'Show Password'}
+        </Button>
+      </View>
+
       <View style={styles.buttonContainer}>
         <Button
-          labelStyle={{ color: theme.colors.text }}
+          mode="contained"
           style={{
-            backgroundColor: theme.colors.accent,
             marginTop: 20,
           }}
           onPress={() => {
@@ -110,6 +133,7 @@ export default function LoginScreen(props) {
           {login ? 'Login' : 'Sign Up'}
         </Button>
         <Button
+          mode="outlined"
           style={{ marginTop: 20 }}
           onPress={() => {
             setLogin(!login);
@@ -119,6 +143,7 @@ export default function LoginScreen(props) {
           {login ? 'Need an account? Sign Up' : 'Have an account? Login'}
         </Button>
       </View>
+      {alert}
     </ScrollView>
   );
 }
@@ -138,5 +163,10 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: '100%',
+  },
+  ButtonTextWrapper: {
+    flexDirection: 'row',
+    alignSelf: 'flex-start',
+    justifyContent: 'flex-start',
   },
 });

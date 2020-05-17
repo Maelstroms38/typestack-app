@@ -4,6 +4,7 @@ import { useTheme, Text, Title } from 'react-native-paper';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { RoundedButton } from '../components';
+import useAlert from '../hooks/use-alert';
 
 export default function Schedule(props) {
   const { navigation } = props;
@@ -18,6 +19,8 @@ export default function Schedule(props) {
       setHasPermission(granted);
     })();
   }, []);
+
+  const { alert } = useAlert({ message: '' });
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.primary }]}>
@@ -125,6 +128,7 @@ export default function Schedule(props) {
           }}
         />
       )}
+      {alert}
     </View>
   );
 }

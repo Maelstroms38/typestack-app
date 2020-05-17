@@ -86,6 +86,7 @@ function ProfileTabNavigator() {
   return (
     <TopTab.Navigator
       tabBarOptions={{
+        lazy: true,
         scrollEnabled: true,
         tabStyle: {
           width: width / 2,

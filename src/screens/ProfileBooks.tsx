@@ -1,13 +1,13 @@
 import React from 'react';
-import { View, SafeAreaView, Animated } from 'react-native';
-import { Card, Avatar, ActivityIndicator } from 'react-native-paper';
-import { useCurrentUserQuery } from '../../graphql';
+import { SafeAreaView, Animated } from 'react-native';
+import { Card, Avatar } from 'react-native-paper';
 import { CardView } from '../components';
 import {
   useCollapsibleStack,
   CollapsibleStackSub,
 } from 'react-navigation-collapsible';
 import { useTheme } from 'react-native-paper';
+import useAuth from '../hooks/use-auth';
 
 interface Props {
   navigation;
@@ -16,31 +16,18 @@ interface Props {
 const ProfileBooks: React.FC<Props> = (props) => {
   const theme = useTheme();
   const { navigation } = props;
-  const { data, loading, refetch } = useCurrentUserQuery({
-    fetchPolicy: 'cache-and-network',
-  });
+  const { getProfile, currentUser } = useAuth();
   const {
     onScroll /* Event handler */,
     containerPaddingTop /* number */,
     scrollIndicatorInsetTop /* number */,
   } = useCollapsibleStack();
-  if (loading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator />
-      </View>
-    );
-  }
   return (
     <SafeAreaView>
       <Animated.FlatList
-        refreshing={loading}
-        onRefresh={() => refetch()}
-        data={
-          data && data.currentUser && data.currentUser.owner
-            ? data.currentUser.owner
-            : []
-        }
+        refreshing={currentUser == null}
+        onRefresh={() => getProfile()}
+        data={currentUser && currentUser.owner ? currentUser.owner : []}
         onScroll={onScroll}
         contentContainerStyle={{ paddingTop: containerPaddingTop }}
         scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
@@ -60,8 +47,8 @@ const ProfileBooks: React.FC<Props> = (props) => {
       />
       <CollapsibleStackSub>
         <Card.Title
-          title={(data.currentUser && data.currentUser.username) || ''}
-          subtitle={(data.currentUser && data.currentUser.email) || ''}
+          title={(currentUser && currentUser.username) || ''}
+          subtitle={(currentUser && currentUser.email) || ''}
           left={(props) => <Avatar.Icon {...props} icon="account" />}
           style={{ backgroundColor: theme.colors.background }}
         />

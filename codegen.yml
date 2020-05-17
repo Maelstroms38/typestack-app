@@ -1,5 +1,5 @@
 overwrite: true
-schema: 'http://127.0.0.1:8000/graphql/'
+schema: 'https://istrand.herokuapp.com/graphql/'
 documents: 'graphql/*.graphql'
 generates:
   graphql/graphql-hooks.ts:

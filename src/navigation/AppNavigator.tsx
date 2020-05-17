@@ -8,7 +8,7 @@ import { MainTabNavigator } from './MainTabNavigator';
 
 const Drawer = createDrawerNavigator();
 
-const AppNavigator = (navProps) => {
+const AppNavigator = ({ toggleTheme }) => {
   const theme = useTheme();
   const navigationTheme = theme.dark ? DarkTheme : DefaultTheme;
 
@@ -16,7 +16,7 @@ const AppNavigator = (navProps) => {
     <NavigationContainer theme={navigationTheme}>
       <Drawer.Navigator
         drawerContent={(props) => (
-          <DrawerContent {...props} toggleTheme={navProps.toggleTheme} />
+          <DrawerContent {...props} toggleTheme={toggleTheme} />
         )}
       >
         <Drawer.Screen name="Home" component={MainTabNavigator} />

@@ -10,12 +10,20 @@ const httpLink = new HttpLink({
 });
 
 const request = async (operation) => {
-  const token = await AsyncStorage.getItem('token');
-  operation.setContext({
-    headers: {
-      authorization: token ? `JWT ${token}` : '',
-    },
-  });
+  try {
+    const token = await AsyncStorage.getItem('token');
+    operation.setContext({
+      headers: {
+        authorization: token ? `JWT ${token}` : '',
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    await AsyncStorage.setItem('token', null);
+    operation.setContext({
+      headers: {},
+    });
+  }
 };
 
 const requestLink = new ApolloLink(

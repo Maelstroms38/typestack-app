@@ -1,5 +1,5 @@
 import axios from 'axios';
-export default async function fetchBook(isbn: String) {
+export default async function fetchBook(isbn: string) {
   const config = {
     headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
   };

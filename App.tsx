@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   DarkTheme as PaperDarkTheme,
   DefaultTheme as PaperDefaultTheme,
-  Provider as PaperProvider
+  Provider as PaperProvider,
 } from 'react-native-paper';
 import {
   DarkTheme as NavigationDarkTheme,
-  DefaultTheme as NavigationDefaultTheme
+  DefaultTheme as NavigationDefaultTheme,
 } from '@react-navigation/native';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { apolloClient } from './graphql';
@@ -14,13 +14,13 @@ import { AppNavigator } from './src/navigation';
 
 const CombinedDefaultTheme = {
   ...PaperDefaultTheme,
-  ...NavigationDefaultTheme
+  ...NavigationDefaultTheme,
 };
 
 const CombinedDarkTheme = {
   ...PaperDarkTheme,
   ...NavigationDarkTheme,
-  colors: { ...PaperDarkTheme.colors, ...NavigationDarkTheme.colors }
+  colors: { ...PaperDarkTheme.colors, ...NavigationDarkTheme.colors },
 };
 
 export default function App() {
@@ -30,7 +30,7 @@ export default function App() {
 
   function toggleTheme() {
     // We will pass this function to Drawer and invoke it on theme switch press
-    setIsDarkTheme(isDark => !isDark);
+    setIsDarkTheme((isDark) => !isDark);
   }
 
   return (

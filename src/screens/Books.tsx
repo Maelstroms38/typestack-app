@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, View, Animated } from 'react-native';
 import { useTheme, Searchbar } from 'react-native-paper';
 import { useBooksQuery } from '../../graphql';
