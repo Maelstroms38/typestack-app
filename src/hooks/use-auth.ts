@@ -19,11 +19,9 @@ export default () => {
 
   const [refreshMutation] = useRefreshMutation({
     async onCompleted({ refreshToken }) {
-      if (refreshToken && refreshToken.token && refreshToken.token.length > 0) {
-        await AsyncStorage.setItem('token', refreshToken.token);
-        setExpiry(refreshToken.refreshExpiresIn);
-        refetch();
-      }
+      await AsyncStorage.setItem('token', refreshToken.token);
+      setExpiry(refreshToken.refreshExpiresIn);
+      refetch();
     },
     onError(error) {
       console.log(error);
