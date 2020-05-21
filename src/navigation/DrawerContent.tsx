@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { DrawerItem, DrawerContentScrollView } from '@react-navigation/drawer';
+import {
+  DrawerItem,
+  DrawerContentScrollView,
+  useIsDrawerOpen,
+} from '@react-navigation/drawer';
 import {
   useTheme,
   Title,
@@ -22,10 +26,13 @@ export function DrawerContent(props) {
     outputRange: [-100, -85, -70, -45, 0],
   });
   const { getProfile, currentUser } = useAuth();
+  const wasDrawerOpen = useIsDrawerOpen();
 
   useEffect(() => {
-    getProfile();
-  }, []);
+    if (wasDrawerOpen) {
+      getProfile();
+    }
+  }, [wasDrawerOpen]);
 
   return (
     <DrawerContentScrollView {...props}>
