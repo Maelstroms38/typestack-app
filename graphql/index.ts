@@ -12,7 +12,6 @@ const httpLink = new HttpLink({
 const request = async (operation) => {
   try {
     const token = await AsyncStorage.getItem('token');
-    console.log(token, 'auth request token');
     operation.setContext({
       headers: {
         authorization: token ? `JWT ${token}` : '',
