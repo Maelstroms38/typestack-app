@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Animated, Dimensions } from 'react-native';
+import { SafeAreaView, View, Animated } from 'react-native';
 import { useTheme, Searchbar, ActivityIndicator } from 'react-native-paper';
 import { useBooksQuery } from '../../graphql';
 import { CardView } from '../components';
@@ -11,8 +11,6 @@ import {
 interface Props {
   navigation;
 }
-
-const { height } = Dimensions.get('window');
 
 const Books: React.FC<Props> = ({ navigation }) => {
   const { data, refetch, loading } = useBooksQuery();
